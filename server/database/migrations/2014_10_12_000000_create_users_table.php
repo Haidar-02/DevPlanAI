@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('user_type');
             $table->timestamps();
         });
+        
         // Users table
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -29,8 +30,6 @@ return new class extends Migration
             $table->longText('profile_picture')->nullable();
             $table->timestamps();
         });
-
-        
 
         // Projects table
         Schema::create('projects', function (Blueprint $table) {
