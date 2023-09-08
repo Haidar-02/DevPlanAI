@@ -17,9 +17,12 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
+        'profile_picture',
+        'user_type_id'
     ];
 
     /**
@@ -61,4 +64,40 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+
+    public function userType()
+    {
+        return $this->belongsTo(UserType::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class, 'project_manager_id');
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'assignee_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function teams()
+    {
+        return $this->hasMany(Team::class);
+    }
+
+    public function contributionRequests()
+    {
+        return $this->hasMany(ContributionRequest::class);
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+    
 }
