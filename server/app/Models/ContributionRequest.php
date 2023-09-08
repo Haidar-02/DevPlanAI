@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ContributionRequest extends Model
 {
     use HasFactory;
-    
+    protected $table = 'contribution_requests';
+
     protected $fillable = [
         'user_id',
         'project_id',

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
+
+    // Normal User Functionalities
+    Route::post("logout", [AuthController::class, "logout"]);
+    Route::post("refresh", [AuthController::class, "refresh"]);
+
+    Route::group(["prefix" => "admin", "middleware" => "admin.valid"], function () {
+        // Admin functionalities here
+    });
 });
+
+Route::post("login", [AuthController::class, "login"]);
+Route::post("register", [AuthController::class, "register"]);
