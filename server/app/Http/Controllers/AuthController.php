@@ -83,14 +83,23 @@
         
             public function logout()
             {
+                try{
                 Auth::logout();
                 return response()->json([
                 'status' => 'success',
                 'message' => 'Successfully logged out',]);
+                }catch(\Exception $e){
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Logout failed, try again later',
+                    ], 500);
+                }
             }
+            
         
             public function refresh()
             {
+                try{
                 $user = Auth::user();
                 $token = Auth::refresh();
         
@@ -99,6 +108,12 @@
                     'user' => $user,
                     'token' => $token,
                 ]);
+            }catch(\Exception $e){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Refresh failed, try again later',
+                ], 500);
+            }
             }
         }
         
