@@ -22,12 +22,9 @@
                     $user = Auth::user();
                     $token = Auth::attempt($credentials);        
                     return response()->json([
-                        'status' => 200,
+                        'status' => 'success',
                         'user' => $user,
-                        'authorization' => [
-                            'token' => $token,
-                            'type' => 'bearer',
-                        ],
+                        'token' => $token,
                     ]);
                 }
         
@@ -53,7 +50,7 @@
                     if ($existingUser) {
                         return response()->json([
                             'status' => 'error',
-                            'message' => 'Email is already in use',
+                            'message' => 'Email already in use',
                         ], 422);
                     }
             
@@ -69,18 +66,15 @@
                     $token = Auth::login($user);
             
                     return response()->json([
-                        'status' => 200,
+                        'status' => 'success',
                         'message' => 'User created successfully',
                         'user' => $user,
-                        'auth' => [
-                            'token' => $token,
-                            'type' => 'bearer',
-                        ],
+                        'token' => $token,
                     ]);
                 } catch (\Exception $e) {
                     return response()->json([
                         'status' => 'error',
-                        'message' => 'Registration failed',
+                        'message' => 'Registration failed, try again later',
                     ], 500);
                 }
             }
@@ -103,10 +97,7 @@
                 return response()->json([
                     'status' => 'success',
                     'user' => $user,
-                    'authorization' => [
-                        'token' => $token,
-                        'type' => 'bearer',
-                    ],
+                    'token' => $token,
                 ]);
             }
         }
