@@ -84,8 +84,6 @@
                     ], 500);
                 }
             }
-            
-            
         
             public function logout()
             {
@@ -102,7 +100,6 @@
                 }
             }
             
-        
             public function refresh()
             {
                 try{
