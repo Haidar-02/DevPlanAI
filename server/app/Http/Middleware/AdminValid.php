@@ -21,6 +21,9 @@ class AdminValid
         if($user->user_type_id=="1"){
             return $next($request);
         }    
-        return redirect()->route("unauthorized");
-    }
+        return response()->json([
+                "status"=>"failed",
+                'message' => 'Unauthorized',
+            ]);
+        }
 }

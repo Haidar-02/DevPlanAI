@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Unaouthorized;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,7 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
     Route::post("logout", [AuthController::class, "logout"]);
     Route::post("refresh", [AuthController::class, "refresh"]);
     Route::get('profile', [UserController::class, 'profile']);
+    Route::post('updateProfile', [UserController::class, 'updateProfile']);
     Route::group(["prefix" => "admin", "middleware" => "admin.valid"], function () {
         // Admin functionalities here
     });
