@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\Unaouthorized;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -24,6 +25,15 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
     Route::post("refresh", [AuthController::class, "refresh"]);
     Route::get('profile', [UserController::class, 'profile']);
     Route::post('updateProfile', [UserController::class, 'updateProfile']);
+    Route::get('getMyProjects', [ProjectController::class, 'getMyProjects']);
+    Route::get('getMyRecentProjects', [ProjectController::class, 'getMyRecentProjects']);
+    Route::get('getProjectInfo/{project_id}', [ProjectController::class, 'getProjectInfo']);
+    Route::get('getProjectTeam/{project_id}', [ProjectController::class, 'getProjectTeam']);
+    Route::get('getProjectTasks/{project_id}', [ProjectController::class, 'getProjectTasks']);
+    Route::post('markProjectDone/{project_id}', [ProjectController::class, 'markProjectDone']);
+
+
+
     Route::group(["prefix" => "admin", "middleware" => "admin.valid"], function () {
         // Admin functionalities here
     });

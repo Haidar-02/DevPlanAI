@@ -30,13 +30,24 @@ class Project extends Model
         return $this->hasMany(Task::class);
     }
 
-    public function teams()
+    public function team()
     {
-        return $this->hasMany(Team::class);
+        return $this->hasManyThrough(User::class, Team::class, 'project_id', 'id', 'id', 'user_id');
     }
 
     public function contributionRequests()
     {
         return $this->hasMany(ContributionRequest::class);
+    }
+
+    public function getStatusAttribute()
+    {
+        if ($this->is_done) {
+            return 'Done';
+        } elseif (now() < $this->deadline) {
+            return 'Pending';
+        } else {
+            return 'Late';
+        }
     }
 }

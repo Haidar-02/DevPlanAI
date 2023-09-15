@@ -34,4 +34,15 @@ class Task extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+    public function getStatusAttribute()
+    {
+        if ($this->is_done) {
+            return 'Done';
+        } elseif (now() < $this->deadline) {
+            return 'Pending';
+        } else {
+            return 'Late';
+        }
+    }
 }
