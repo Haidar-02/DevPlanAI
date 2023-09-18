@@ -31,12 +31,14 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
     Route::get('getProjectTeam/{project_id}', [ProjectController::class, 'getProjectTeam']);
     Route::get('getProjectTasks/{project_id}', [ProjectController::class, 'getProjectTasks']);
     Route::post('markProjectDone/{project_id}', [ProjectController::class, 'markProjectDone']);
-
+    Route::post('deleteProject/{project_id}', [ProjectController::class, 'deleteProject']);
+    Route::post('editProjectInfo/{project_id}', [ProjectController::class, 'editProjectInfo']);
 
 
     Route::group(["prefix" => "admin", "middleware" => "admin.valid"], function () {
         // Admin functionalities here
     });
+    
 });
 
 Route::post("login", [AuthController::class, "login"]);

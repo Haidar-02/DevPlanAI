@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comments;
 use App\Models\ContributionRequest;
 use App\Models\Notification;
 use App\Models\Project;
+use App\Models\Task;
+use App\Models\Team;
 use App\Models\User;
+use Egulias\EmailValidator\Parser\Comment;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,20 +20,20 @@ class ProjectController extends Controller
     public function getMyProjects(Request $request)
     {
         $user = User::findOrFail(Auth::id());
-    
+
         $projects = $user->projects()->with('projectManager')->with('team');
-    
+
         $contributedProjects = Project::whereHas('team', function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })->with('projectManager')->with('team');
-    
+
         $projects = $projects->union($contributedProjects)->get();
-    
+
         $projects->map(function ($project) {
             $project->status = $project->status;
             return $project;
         });
-    
+
         return response()->json([
             'projects' => $projects,
         ]);
@@ -38,23 +42,31 @@ class ProjectController extends Controller
 
     public function getMyRecentProjects(Request $request)
     {
-        $user = User::where('id', Auth::id())->first();
-        $projects = $user->projects()
-        ->with('projectManager')
-        ->with('team')
-        ->orderBy('created_at', 'desc')
-        ->take(5)
-        ->get();
+        $user = User::findOrFail(Auth::id());
 
-        $projects->map(function ($project) {
+        $projects = $user->projects()
+            ->with('projectManager')
+            ->with('team');
+
+        $contributedProjects = Project::whereHas('team', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->with('projectManager')->with('team');
+
+        $mergedProjects = $projects->union($contributedProjects)
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
+        $mergedProjects->map(function ($project) {
             $project->status = $project->status;
             return $project;
         });
-        
+
         return response()->json([
-            'projects' => $projects,
+            'projects' => $mergedProjects,
         ]);
     }
+
 
     public function getProjectInfo($projectId)
     {
@@ -112,7 +124,7 @@ class ProjectController extends Controller
 
             if ($user->id !== $project->project_manager_id) {
                 return response()->json([
-                    'status' => "failed",
+                    'status' => "error",
                     'message' => 'Only the project manager can mark the project as done.',
                 ], 403);
             }
@@ -140,7 +152,7 @@ class ProjectController extends Controller
             ]);
         }catch(Error $e){
             return response()->json([
-                'status' => 'failed',
+                'status' => 'error',
                 'message' => 'An error occured try again later',
             ]);
         }
@@ -154,13 +166,14 @@ class ProjectController extends Controller
 
             if ($user->id !== $project->project_manager_id) {
                 return response()->json([
+                    'status' => 'error',
                     'message' => 'Only the project manager can edit project information.',
                 ], 403);
             }
 
             if(!$request->title || !$request->description ||!$request->deadline){
                 return response()->json([
-                    'status' => 'failed',
+                    'status' => 'error',
                     'message' => 'Please fill in all fields',
                 ]);
             }
@@ -169,7 +182,7 @@ class ProjectController extends Controller
             && $request->description == $project->description 
             && $request->deadline == $project->deadline){
                 return response()->json([
-                    'status' => 'failed',
+                    'status' => 'error',
                     'message' => 'No Change Occured',
                 ]);
             }
@@ -187,7 +200,7 @@ class ProjectController extends Controller
 
         }catch(Error $e){
             return response()->json([
-                'status' => 'failed',
+                'status' => 'error',
                 'message' => 'An error occured try again later',
             ]);
         }
@@ -195,21 +208,49 @@ class ProjectController extends Controller
 
     public function deleteProject($projectId)
     {
-        $project = Project::findOrFail($projectId);
-        $user = Auth::user();
+        try {
+            $project = Project::findOrFail($projectId);
+            $user = Auth::user();
+    
+            if ($user->id !== $project->project_manager_id) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Only the project manager can delete the project.',
+                ], 403);
+            }
+    
+            Comments::where('task_id', $project->tasks->pluck('id'))->delete();
+    
+            Task::where('project_id', $projectId)->delete();
+    
+            $teamMembers = $project->team;
 
-        if ($user->id !== $project->project_manager_id) {
+            $notification='Project ' . $project->title . ' has been abandoned';
+
+            foreach ($teamMembers as $teamMember) {
+                Notification::create([
+                    'user_id' => $teamMember->id,
+                    'message' => $notification,
+                    'is_read' => false,
+                ]);
+            }
+    
+            Team::where('project_id', $projectId)->delete();
+    
+            $project->delete();
+    
             return response()->json([
-                'message' => 'Only the project manager can delete the project.',
-            ], 403);
+                'status' => 'success',
+                'message' => 'Project deleted successfully.',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Project could not be deleted. Try again later.',
+            ]);
         }
-
-        //TODO Delete the project and related data
-
-        return response()->json([
-            'message' => 'Project deleted successfully.',
-        ]);
     }
+    
 
     public function addProjectContributor(Request $request, $projectId)
     {
@@ -218,14 +259,29 @@ class ProjectController extends Controller
 
         if ($user->id !== $project->project_manager_id) {
             return response()->json([
+                'status' => 'error',
                 'message' => 'Only the project manager can add contributors.',
             ], 403);
         }
 
-        //TODO Add a contributor
+        $existing =Team::where('project_id', $project->id)->where('user_id', $request->user_id)->first();
 
+        if($existing){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Contributor already exists in project '. $project->title,
+            ]);
+        }
+
+        $contribRequest = ContributionRequest::create([
+            'user_id'=>$request->user_id,
+            'project_id'=>$projectId,
+        ]);
+        
         return response()->json([
+            'status' => 'success',
             'message' => 'Contributor added to the project successfully.',
+            'Request'=>$contribRequest
         ]);
     }
 
@@ -236,13 +292,27 @@ class ProjectController extends Controller
 
         if ($user->id !== $project->project_manager_id) {
             return response()->json([
+                'status' => 'error',
                 'message' => 'Only the project manager can remove contributors.',
             ], 403);
         }
+        if(!$request->user_id){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No contributor selected',
+            ]);
+        }
 
-        //TODO Remove a contributor from the project
+        $assigned_tasks=Task::where('project_id', $projectId)->where('assignee_id', $request->user_id);
+
+        foreach($assigned_tasks as $task){
+            $task->assignee_id=null;
+        }
+
+        Team::where('project_id', $projectId)->where('user_id', $request->user_id)->delete();
 
         return response()->json([
+            'status' => 'error',
             'message' => 'Contributor removed from the project successfully.',
         ]);
     }
@@ -250,19 +320,62 @@ class ProjectController extends Controller
     public function acceptContribution(Request $request, $contributionRequestId)
     {
         $contributionRequest = ContributionRequest::findOrFail($contributionRequestId);
-        //TODO Accept the contribution request
+
+        if(!$contributionRequest){
+            return response()->json([
+                'status' => 'error',
+                "message" => "Request don't exist.",
+            ]);
+        }
+
+        $existing=Team::where('user_id',$contributionRequest->user_id)
+        ->where('project_id', $contributionRequest->project_id)->first();
+        if($existing){
+            $contributionRequest->delete();
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Already contributing in this project.',
+            ]);
+        }
+
+        $project = Project::where('project_id', $contributionRequest->project_id)->first();
+        $user=User::where('user_id', $contributionRequest->user_id);
+
+        $newMember= Team::create([
+            'user_id'=>$contributionRequest->user_id,
+            'project_id'=>$contributionRequest->project_id,
+        ]);
+
+        $notification='Member ' . $user->first_name . ' '.$user->last_name.' has accepted your team request on '. $project->title ;
+        Notification::create([
+            'user_id' => $project->project_manager_id,
+            'message' => $notification,
+            'is_read' => false,
+        ]);
+
+        $contributionRequest->delete();
 
         return response()->json([
+            'status' => 'success',
             'message' => 'Contribution request accepted successfully.',
+            'newMember'=>$newMember,
         ]);
     }
 
     public function declineContribution(Request $request, $contributionRequestId)
     {
         $contributionRequest = ContributionRequest::findOrFail($contributionRequestId);
-        // TODO Decline the contribution request
+        
+        if(!$contributionRequest){
+            return response()->json([
+                'status' => 'error',
+                "message" => "Request don't exist.",
+            ]);
+        }
+        $contributionRequest->delete();
 
         return response()->json([
+            'status' => 'success',
             'message' => 'Contribution request declined successfully.',
         ]);
     }
