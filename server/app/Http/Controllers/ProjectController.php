@@ -273,6 +273,14 @@ class ProjectController extends Controller
             ]);
         }
 
+        $exisingRequest = ContributionRequest::where('user_id', $request->user_id)->where('project_id', $projectId);
+        if($exisingRequest){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Request already sent',
+            ]);
+        }
+
         $contribRequest = ContributionRequest::create([
             'user_id'=>$request->user_id,
             'project_id'=>$projectId,
@@ -280,7 +288,7 @@ class ProjectController extends Controller
         
         return response()->json([
             'status' => 'success',
-            'message' => 'Contributor added to the project successfully.',
+            'message' => 'Contribution request sent successfully.',
             'Request'=>$contribRequest
         ]);
     }
@@ -303,6 +311,14 @@ class ProjectController extends Controller
             ]);
         }
 
+        $checkExistance = Team::where('user_id', $request->user_id)->where('project_id', $projectId);
+        if($checkExistance){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Member not in your team',
+            ]);
+        }
+
         $assigned_tasks=Task::where('project_id', $projectId)->where('assignee_id', $request->user_id);
 
         foreach($assigned_tasks as $task){
@@ -312,7 +328,7 @@ class ProjectController extends Controller
         Team::where('project_id', $projectId)->where('user_id', $request->user_id)->delete();
 
         return response()->json([
-            'status' => 'error',
+            'status' => 'success',
             'message' => 'Contributor removed from the project successfully.',
         ]);
     }
@@ -377,6 +393,36 @@ class ProjectController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Contribution request declined successfully.',
+        ]);
+    }
+
+    public function searchMyProjects(Request $request)
+    {
+        $userId = Auth::id();
+    
+        $searchQuery = $request->content;
+    
+        $projects = Project::where(function ($query) use ($searchQuery) {
+            $query->where('title', 'like', '%' . $searchQuery . '%')
+                  ->orWhere('description', 'like', '%' . $searchQuery . '%');
+        })
+        ->where(function ($query) use ($userId) {
+            $query->whereHas('team', function ($subquery) use ($userId) {
+                $subquery->where('user_id', $userId);
+            })
+            ->orWhere('project_manager_id', $userId);
+        })
+        ->with('projectManager')
+        ->with('team')
+        ->get();
+    
+        $projects->map(function ($project) {
+            $project->status = $project->status;
+            return $project;
+        });
+    
+        return response()->json([
+            'projects' => $projects,
         ]);
     }
 
