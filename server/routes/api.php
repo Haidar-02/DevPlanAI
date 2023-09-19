@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProjectController;
@@ -65,7 +66,13 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
 
 
     Route::group(["prefix" => "admin", "middleware" => "admin.valid"], function () {
-        // Admin functionalities here
+
+        Route::get("getAllProjects", [AdminController::class, "getAllProjects"]);
+        Route::post("searchAllProjects", [AdminController::class, "searchAllProject"]);
+        Route::delete("deleteProjectAdmin/{projectId}", [AdminController::class, "deleteProject"]);
+        Route::get("getAllUsers", [AdminController::class, "getAllUsers"]);
+        Route::delete("deleteUser/{userId}", [AdminController::class, "deleteUser"]);
+
     });
 
 });

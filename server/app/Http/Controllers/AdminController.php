@@ -20,7 +20,7 @@ class AdminController extends Controller
 
     public function searchAllProject(Request $request)
     {
-        $search = $request->input('search');
+        $search = $request->input('content');
         $projects = Project::where('title', 'like', "%$search%")
             ->orWhere('description', 'like', "%$search%")
             ->get();
