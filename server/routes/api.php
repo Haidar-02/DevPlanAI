@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\Unaouthorized;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -43,6 +44,17 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
     Route::get('getMyContributionRequests', [ProjectController::class, 'getMyContributionRequests']);
     Route::post('searchMyProjects', [ProjectController::class, 'searchMyProjects']);
     Route::post('searchUsers', [ProjectController::class, 'searchUsers']);
+
+    Route::post('addNewTask/{project_id}', [TaskController::class, 'addNewTask']);
+    Route::delete('deleteTask/{task_id}', [TaskController::class, 'deleteTask']);
+    Route::post('editTask/{task_id}', [TaskController::class, 'editTask']);
+    Route::post('markTaskDone/{task_id}', [TaskController::class, 'markTaskDone']);
+    Route::post('addTaskAssignee/{task_id}', [TaskController::class, 'addTaskAssignee']);
+    Route::delete('removeTaskAssignee/{task_id}', [TaskController::class, 'removeTaskAssignee']);
+    Route::post('addTaskComment/{task_id}', [TaskController::class, 'addTaskComment']);
+    Route::get('getTaskInfo/{task_id}', [TaskController::class, 'getTaskInfo']);
+    Route::get('getTaskComments/{task_id}', [TaskController::class, 'getTaskComments']);
+
 
     Route::get('getUnreadNotifications', [NotificationController::class, 'getUnreadNotifications']);
     Route::get('getReadNotifications', [NotificationController::class, 'getReadNotifications']);
