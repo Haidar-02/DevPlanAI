@@ -273,7 +273,7 @@ class ProjectController extends Controller
             ]);
         }
 
-        $exisingRequest = ContributionRequest::where('user_id', $request->user_id)->where('project_id', $projectId);
+        $exisingRequest = ContributionRequest::where('user_id', $request->user_id)->where('project_id', $projectId)->first();
         if($exisingRequest){
             return response()->json([
                 'status' => 'error',
@@ -335,47 +335,56 @@ class ProjectController extends Controller
 
     public function acceptContribution(Request $request, $contributionRequestId)
     {
-        $contributionRequest = ContributionRequest::findOrFail($contributionRequestId);
-
-        if(!$contributionRequest){
-            return response()->json([
-                'status' => 'error',
-                "message" => "Request don't exist.",
+        try {
+            $contributionRequest = ContributionRequest::findOrFail($contributionRequestId);
+    
+            if (!$contributionRequest) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Request does not exist.',
+                ]);
+            }
+    
+            $existingTeamMember = Team::where('user_id', $contributionRequest->user_id)
+                ->where('project_id', $contributionRequest->project_id)
+                ->first();
+    
+            if ($existingTeamMember) {
+                $contributionRequest->delete();
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'User is already a team member in this project.',
+                ]);
+            }
+    
+            $project = Project::findOrFail($contributionRequest->project_id);
+            $user = User::findOrFail($contributionRequest->user_id);
+    
+            $newTeamMember = Team::create([
+                'user_id' => $user->id,
+                'project_id' => $project->id,
             ]);
-        }
-
-        $existing=Team::where('user_id',$contributionRequest->user_id)
-        ->where('project_id', $contributionRequest->project_id)->first();
-        if($existing){
+    
+            $notificationMessage = 'Member ' . $user->first_name . ' ' . $user->last_name . ' has been added to your project team: ' . $project->title;
+            Notification::create([
+                'user_id' => $project->project_manager_id,
+                'message' => $notificationMessage,
+                'is_read' => false,
+            ]);
+    
             $contributionRequest->delete();
+    
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Contribution request accepted successfully.',
+                'newMember' => $newTeamMember,
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Already contributing in this project.',
-            ]);
+                'message' => 'Error accepting contribution request. Try again later.',
+            ], 500);
         }
-
-        $project = Project::where('project_id', $contributionRequest->project_id)->first();
-        $user=User::where('user_id', $contributionRequest->user_id);
-
-        $newMember= Team::create([
-            'user_id'=>$contributionRequest->user_id,
-            'project_id'=>$contributionRequest->project_id,
-        ]);
-
-        $notification='Member ' . $user->first_name . ' '.$user->last_name.' has accepted your team request on '. $project->title ;
-        Notification::create([
-            'user_id' => $project->project_manager_id,
-            'message' => $notification,
-            'is_read' => false,
-        ]);
-
-        $contributionRequest->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Contribution request accepted successfully.',
-            'newMember'=>$newMember,
-        ]);
     }
 
     public function declineContribution(Request $request, $contributionRequestId)
@@ -424,6 +433,33 @@ class ProjectController extends Controller
         return response()->json([
             'projects' => $projects,
         ]);
+    }
+
+    public function getMyContributionRequests()
+    {
+        try {
+            $requests = ContributionRequest::where('user_id', Auth::id())->get();
+    
+            if ($requests->isEmpty()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'No recent requests for you',
+                ]);
+            }
+    
+            $requests->load('project.projectManager');
+    
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Requests successfully retrieved',
+                'contribution_requests' => $requests,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Couldn't retrieve Contribution requests. Try again later",
+            ]);
+        }
     }
 
     //using openai api

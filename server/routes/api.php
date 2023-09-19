@@ -26,7 +26,7 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
 
     Route::get('profile', [UserController::class, 'profile']);
     Route::post('updateProfile', [UserController::class, 'updateProfile']);
-    
+
     Route::get('getMyProjects', [ProjectController::class, 'getMyProjects']);
     Route::get('getMyRecentProjects', [ProjectController::class, 'getMyRecentProjects']);
     Route::get('getProjectInfo/{project_id}', [ProjectController::class, 'getProjectInfo']);
@@ -37,8 +37,9 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
     Route::post('editProjectInfo/{project_id}', [ProjectController::class, 'editProjectInfo']);
     Route::post('addProjectContributor/{project_id}', [ProjectController::class, 'addProjectContributor']);
     Route::post('removeProjectContributer/{project_id}', [ProjectController::class, 'removeProjectContributer']);
-    Route::post('acceptContribution/{project_id}', [ProjectController::class, 'acceptContribution']);
-    Route::post('declineContribution/{project_id}', [ProjectController::class, 'declineContribution']);
+    Route::post('acceptContribution/{contribution_id}', [ProjectController::class, 'acceptContribution']);
+    Route::post('declineContribution/{contribution_id}', [ProjectController::class, 'declineContribution']);
+    Route::get('getMyContributionRequests', [ProjectController::class, 'getMyContributionRequests']);
     Route::post('searchMyProjects', [ProjectController::class, 'searchMyProjects']);
 
 
