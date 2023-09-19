@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comments;
+use App\Models\Notification;
 use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -221,13 +222,6 @@ class TaskController extends Controller
                 ], 403);
             }
     
-            if(!$request->assignee_id){
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'No assignee selected',
-                ]);
-            }
-    
             $task->update([
                 'assignee_id' => null,
             ]);
@@ -247,21 +241,30 @@ class TaskController extends Controller
     public function addTaskComment(Request $request, $task_id)
     {
         try {
-            // Find the task
             $task = Task::findOrFail($task_id);
+            $project = Project::findOrFail($task->project_id);
     
-            // Validate the request data
-            $request->validate([
-                'comment' => 'required|string',
-            ]);
+            if(!$request->comment){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Cannot send empty comment',
+                ]);
+            }
     
-            // Create a new comment for the task
             $comment = Comments::create([
-                'comment' => $request->input('comment'),
+                'content' => $request->input('comment'),
                 'task_id' => $task_id,
                 'user_id' => Auth::id(),
             ]);
-    
+            
+            if($task->assignee_id && Auth::id()!=$task->assignee_id){
+                Notification::create([
+                    'user_id' => $task->assignee_id,
+                    'is_read' => false,
+                    'message' => "New Comment from " . Auth::user()->first_name ." on task ". $task->title . " in project ".$project->title
+                ]);
+            }
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Task comment added successfully.',
@@ -271,6 +274,7 @@ class TaskController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'An error occurred while adding the task comment.',
+                'error'=>$e
             ]);
         }
     }
@@ -278,12 +282,13 @@ class TaskController extends Controller
     public function getTaskInfo(Request $request, $task_id)
     {
         try {
-            // Find the task with related assignees
-            $task = Task::with('assignees')->findOrFail($task_id);
+            $task = Task::with('assignee')->findOrFail($task_id);
+            $status=$task->status;
     
             return response()->json([
                 'status' => 'success',
                 'task' => $task,
+                'task_status'=>$status,
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -296,7 +301,6 @@ class TaskController extends Controller
     public function getTaskComments(Request $request, $task_id)
     {
         try {
-            // Find the task with related comments and user info
             $task = Task::with('comments.user')->findOrFail($task_id);
     
             return response()->json([
