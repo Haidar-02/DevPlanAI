@@ -41,6 +41,7 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
     Route::post('declineContribution/{contribution_id}', [ProjectController::class, 'declineContribution']);
     Route::get('getMyContributionRequests', [ProjectController::class, 'getMyContributionRequests']);
     Route::post('searchMyProjects', [ProjectController::class, 'searchMyProjects']);
+    Route::post('searchUsers', [ProjectController::class, 'searchUsers']);
 
 
     Route::group(["prefix" => "admin", "middleware" => "admin.valid"], function () {

@@ -424,6 +424,13 @@ class ProjectController extends Controller
         ->with('projectManager')
         ->with('team')
         ->get();
+
+        if ($projects->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No such project in your projects',
+            ]);
+        }
     
         $projects->map(function ($project) {
             $project->status = $project->status;
@@ -458,6 +465,36 @@ class ProjectController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => "Couldn't retrieve Contribution requests. Try again later",
+            ]);
+        }
+    }
+
+    public function searchUsers(Request $request)
+    {
+        try {
+            $searchQuery = $request->content;
+    
+            $users = User::where('first_name', 'like', '%' . $searchQuery . '%')
+                ->orWhere('last_name', 'like', '%' . $searchQuery . '%')
+                ->orWhere('email', 'like', '%' . $searchQuery . '%')
+                ->get();
+
+            if($users->isEmpty()){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'No such users found',
+                ]);
+            }
+    
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Users matching your search',
+                'users' => $users,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while searching for users. Try again later',
             ]);
         }
     }
