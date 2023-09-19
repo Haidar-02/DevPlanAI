@@ -499,9 +499,46 @@ class ProjectController extends Controller
         }
     }
 
-    //using openai api
     function generateProject(Request $request){
-        $prompt="";
+
+        try{
+
+            if(!$request->title||!$request->type||!$request->deadline||!$request->description){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Please fill in all fields',
+                ]);
+            }
+
+                            
+            $prompt = "Generate project's description and tasks for the project with :\n";
+            $prompt .="title : " . $request->title ."\n";
+            $prompt .="type : " . $request->type ."\n";
+            $prompt .="description : " . $request->description ."\n";
+            $prompt .="deadline : " . $request->deadline ."\n";
+
+            $prompt .=  "return a JSON response of the resulting tasks generated and the project information.
+                        The project's start date is today, generate tasks based on that. 
+                        Each generated task must have a title as title, a description as description, and a deadline as deadline. 
+                        The project returned must have a title, a description, a deadline which I gave you before, and its corresponding tasks. 
+                        The task title should describe the task content. 
+                        Divide frontend, backend, design and testing into smaller tasks if any of them exist, and be specific in each task's title. 
+                        None of the tasks' deadlines must exceed the project's deadline. return the deadline in the form of yyyy-mm-dd. \n";
+
+            $prompt .="if any of the inputs is not understandable 
+                        return a JSON response with a status error and message saying the not understandable input.\n";
+
+            $prompt .=  "I want your answer to be a parsable JSON object do not include any text like here is your output and so on. 
+                        Only return one response if error return error response, if not return the generated project. 
+                        don't include in your answer any other text rather than the JSON response. 
+                        Do not include Certainly, here's the JSON response for your project, return just the JSON response.";
+
+        }catch(Error $e){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while generating project. Try again later',
+            ]);
+        }
     }
     
 }
