@@ -500,6 +500,8 @@ class ProjectController extends Controller
     }
 
     //using openai api
-    // function generateProject(Request $request){}
+    function generateProject(Request $request){
+        $prompt="";
+    }
     
 }
