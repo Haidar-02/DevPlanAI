@@ -134,16 +134,6 @@ class TaskController extends Controller
         try {
             $task = Task::findOrFail($task_id);
     
-            $user = Auth::user();
-            $project = $task->project;
-            
-            if ($user->id !== $project->project_manager_id) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Only the project manager can mark a task as done.',
-                ], 403);
-            }
-    
             $task->is_done = true;
             $task->save();
     
@@ -158,12 +148,31 @@ class TaskController extends Controller
             ]);
         }
     }
+
+    public function markTaskUndone(Request $request, $task_id)
+    {
+        try {
+            $task = Task::findOrFail($task_id);
+    
+            $task->is_done = false;
+            $task->save();
+    
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Task marked as unDone successfully.',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while marking the task as done.',
+            ]);
+        }
+    }
     
     public function addTaskAssignee(Request $request, $task_id)
     {
         try {
             $task = Task::findOrFail($task_id);
-    
             $user = Auth::user();
             $project = $task->project;
             
@@ -174,11 +183,16 @@ class TaskController extends Controller
                 ], 403);
             }
     
-            $request->validate([
-                'assignee_id' => 'required|integer|exists:users,id',
-            ]);
+            if(!$request->assignee_id){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'No assignee selected',
+                ]);
+            }
     
-            $task->assignees()->attach($request->input('assignee_id'));
+            $task->update([
+                'assignee_id' => $request->input('assignee_id'),
+            ]);
     
             return response()->json([
                 'status' => 'success',
@@ -207,11 +221,16 @@ class TaskController extends Controller
                 ], 403);
             }
     
-            $request->validate([
-                'assignee_id' => 'required|integer|exists:users,id',
-            ]);
+            if(!$request->assignee_id){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'No assignee selected',
+                ]);
+            }
     
-            $task->assignees()->detach($request->input('assignee_id'));
+            $task->update([
+                'assignee_id' => null,
+            ]);
     
             return response()->json([
                 'status' => 'success',

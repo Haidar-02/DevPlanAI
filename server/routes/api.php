@@ -49,6 +49,7 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
     Route::delete('deleteTask/{task_id}', [TaskController::class, 'deleteTask']);
     Route::post('editTask/{task_id}', [TaskController::class, 'editTask']);
     Route::post('markTaskDone/{task_id}', [TaskController::class, 'markTaskDone']);
+    Route::post('markTaskUndone/{task_id}', [TaskController::class, 'markTaskUndone']);
     Route::post('addTaskAssignee/{task_id}', [TaskController::class, 'addTaskAssignee']);
     Route::delete('removeTaskAssignee/{task_id}', [TaskController::class, 'removeTaskAssignee']);
     Route::post('addTaskComment/{task_id}', [TaskController::class, 'addTaskComment']);
