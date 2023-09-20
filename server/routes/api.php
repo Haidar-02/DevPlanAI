@@ -45,6 +45,7 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
     Route::get('getMyContributionRequests', [ProjectController::class, 'getMyContributionRequests']);
     Route::post('searchMyProjects', [ProjectController::class, 'searchMyProjects']);
     Route::post('searchUsers', [ProjectController::class, 'searchUsers']);
+    Route::post('acceptGeneratedProject', [ProjectController::class, 'acceptGeneratedProject']);
 
     Route::post('addNewTask/{project_id}', [TaskController::class, 'addNewTask']);
     Route::delete('deleteTask/{task_id}', [TaskController::class, 'deleteTask']);
@@ -61,9 +62,6 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
     Route::get('getUnreadNotifications', [NotificationController::class, 'getUnreadNotifications']);
     Route::get('getReadNotifications', [NotificationController::class, 'getReadNotifications']);
     Route::post('markNotificationAsRead/{notification_id}', [NotificationController::class, 'markNotificationAsRead']);
-
-
-
 
     Route::group(["prefix" => "admin", "middleware" => "admin.valid"], function () {
 
