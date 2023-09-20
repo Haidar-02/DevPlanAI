@@ -1,3 +1,5 @@
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import LandingPage from "./Pages/LandingPage/LandingPage";
 import LoginSignup from "./Pages/LoginSignUp/LoginSignup";
@@ -5,13 +7,11 @@ import LoginSignup from "./Pages/LoginSignUp/LoginSignup";
 function App() {
   return (
     <Router>
-      <div>
-        <Switch>
-          <Route path="/" exact component={LandingPage} />
-          <Route path="/auth" component={LoginSignup} />
-          <Route path="/Dashboard" component={Dashboard} />
-        </Switch>
-      </div>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/auth" element={<LoginSignup />} />
+        <Route path="/Dashboard" element={<Dashboard />} />
+      </Routes>
     </Router>
   );
 }
