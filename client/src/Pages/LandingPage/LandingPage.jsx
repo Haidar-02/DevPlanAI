@@ -49,6 +49,11 @@ const LandingPage = () => {
         <p className="tracking-widest text-xl mt-3 text-animation">
           Project Management <span ref={dynamicTextRef}></span>
         </p>
+
+        <p className="mt-5 w-1/2 text-center font-light">
+          With the help of AI, create and manage your development project
+          schedule
+        </p>
         <button
           onClick={() => navigate("/login")}
           className="mt-10 tracking-wide px-5 py-1 rounded-full bg-white w-fit text-gray-700 hover:bg-orange-500 hover:text-white transition-all"
