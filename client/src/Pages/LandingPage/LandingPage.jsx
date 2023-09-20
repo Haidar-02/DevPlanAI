@@ -10,11 +10,11 @@ const LandingPage = () => {
         <img src={logo} alt="" className="w-72 logo" />
         <h1 className=" font-black text-5xl">DevPlanAI</h1>
         <p className="tracking-widest">Helping you reach your goals</p>
-        <button className="mt-10 px-3 py-1 rounded-full bg-white w-full text-gray-700 hover:bg-orange-500 hover:text-white transition-all">
+        <button className="mt-10 tracking-wide px-3 py-1 rounded-full bg-white w-full text-gray-700 hover:bg-orange-500 hover:text-white transition-all">
           Continue to DevPlanAI
         </button>
       </div>
-      <img src={team} alt="" className=" object-fit w-1/2 gray z-10" />
+      <img src={team} alt="" className=" object-fit w-2/5 gray z-10" />
 
       <div className="h-44 w-44 absolute top-8 right-32 bg-gray-400 rounded-full -z-1 gray"></div>
       <div className="h-32 w-32 absolute bottom-2 right-96 bg-purple-300 rounded-full -z-1 purple"></div>
