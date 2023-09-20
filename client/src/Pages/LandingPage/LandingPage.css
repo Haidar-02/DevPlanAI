@@ -31,3 +31,26 @@
     transform: translateY(-20px);
   }
 }
+
+.text-animation span {
+  position: relative;
+  color: #fcb127;
+}
+
+.text-animation span::before {
+  content: "";
+  right: -4px;
+  top: 13px;
+  position: absolute;
+  height: 20px;
+  width: 2px;
+  background: #ffffff;
+  transform: translateY(-45%);
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
