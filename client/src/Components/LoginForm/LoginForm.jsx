@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ErrorMessageComponent from "../EventComponents/ErrorComponent";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -8,6 +9,10 @@ const LoginForm = () => {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const clearMessage = () => {
+    setErrorMessage("");
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -22,10 +27,10 @@ const LoginForm = () => {
   };
 
   const handleLogin = () => {
-    // Basic validation (you can add more complex validation as needed)
     if (formData.email.trim() === "" || formData.password.trim() === "") {
-      alert("Please enter both email and password.");
+      setErrorMessage("Please enter both email and password");
     } else {
+      setErrorMessage("");
       // Perform the login logic here (e.g., sending a request to the server)
       // After successful login, you can navigate to another page
       // For now, let's navigate to a dummy page "/dashboard"
@@ -80,6 +85,15 @@ const LoginForm = () => {
           Register now
         </span>
       </p>
+
+      <div className="absolute top-10 right-10">
+        {errorMessage && (
+          <ErrorMessageComponent
+            message={errorMessage}
+            clearMessage={clearMessage}
+          />
+        )}
+      </div>
     </div>
   );
 };

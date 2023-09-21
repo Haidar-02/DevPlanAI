@@ -4,6 +4,7 @@ import Dashboard from "./Pages/Dashboard/Dashboard";
 import LandingPage from "./Pages/LandingPage/LandingPage";
 import Login from "./Pages/Login/Login";
 import Signup from "./Pages/Signup/Signup";
+import "animate.css/animate.min.css";
 
 function App() {
   return (
