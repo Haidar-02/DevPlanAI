@@ -1,7 +1,6 @@
 import Lottie from "lottie-react";
 import React, { useState, useEffect } from "react";
 import errorLottie from "../../Assets/LottieAssets/error.json";
-import "./EvenComponents.css";
 import "animate.css/animate.min.css";
 
 const ErrorMessageComponent = ({ message, clearMessage }) => {

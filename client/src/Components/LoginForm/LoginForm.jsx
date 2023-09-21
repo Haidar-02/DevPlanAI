@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ErrorMessageComponent from "../EventComponents/ErrorComponent";
+import SuccessMessageComponent from "../EventComponents/SuccessComponent";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -88,7 +89,7 @@ const LoginForm = () => {
 
       <div className="absolute top-10 right-10">
         {errorMessage && (
-          <ErrorMessageComponent
+          <SuccessMessageComponent
             message={errorMessage}
             clearMessage={clearMessage}
           />
