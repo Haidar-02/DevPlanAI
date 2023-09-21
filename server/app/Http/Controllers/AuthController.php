@@ -10,29 +10,32 @@
         {
             public function login(Request $request)
             {
-                try{
-                    $request->validate([
-                        'email' => 'required|string|email',
-                        'password' => 'required|string',
-                    ]);
-        
+                try {
+                    if (!$request->email || !$request->password) {
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => 'Both email and password are required',
+                        ]);
+                    }
+            
                     $credentials = $request->only('email', 'password');
-        
+            
                     if (Auth::attempt($credentials)) {
                         $user = Auth::user();
-                        $token = Auth::attempt($credentials);        
+                        $token = Auth::attempt($credentials);
+            
                         return response()->json([
                             'status' => 'success',
                             'user' => $user,
                             'token' => $token,
                         ]);
+                    } else {
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => 'Wrong email or password',
+                        ], 401);
                     }
-        
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Wrong email or password',
-                    ], 401);
-                }catch (\Exception $e) {
+                } catch (\Exception $e) {
                     return response()->json([
                         'status' => 'error',
                         'message' => 'Login failed, try again later',

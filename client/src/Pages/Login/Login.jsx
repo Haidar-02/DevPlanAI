@@ -21,7 +21,7 @@ const Login = () => {
             Welcome back to <strong>DevPlanAI</strong>
           </h1>
           <p className="text-gray-300 tracking-wider ml-16">
-            Please sign in inorder to continue
+            Please sign in order to continue
           </p>
         </div>
         <div>

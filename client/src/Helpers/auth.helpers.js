@@ -14,10 +14,8 @@ async function login({ email, password }) {
       email,
       password,
     });
-    if (res.status === 200) {
-      const data = res.data;
-      return { data };
-    }
+    const data = res.data;
+    return { data };
   } catch (error) {
     console.log(error);
   }

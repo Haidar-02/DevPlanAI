@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ErrorMessageComponent from "../EventComponents/ErrorComponent";
 import SuccessMessageComponent from "../EventComponents/SuccessComponent";
-
+import { login } from "../../Helpers/auth.helpers";
 const LoginForm = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -11,8 +11,10 @@ const LoginForm = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [succesMessage, setSuccesMessage] = useState("");
   const clearMessage = () => {
     setErrorMessage("");
+    setSuccesMessage("");
   };
 
   const handleInputChange = (e) => {
@@ -27,15 +29,30 @@ const LoginForm = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (formData.email.trim() === "" || formData.password.trim() === "") {
       setErrorMessage("Please enter both email and password");
     } else {
       setErrorMessage("");
-      // Perform the login logic here (e.g., sending a request to the server)
-      // After successful login, you can navigate to another page
-      // For now, let's navigate to a dummy page "/dashboard"
-      navigate("/dashboard");
+      try {
+        const response = await login({
+          email: formData.email,
+          password: formData.password,
+        });
+        if (response.data.status === "error") {
+          if (response.status === 401) {
+            setErrorMessage("Wrong email or password");
+          } else {
+            setErrorMessage(response.data.message);
+          }
+        } else {
+          localStorage.setItem("token", response.data.token);
+          setSuccesMessage("Login successful");
+          navigate("/dashboard");
+        }
+      } catch (error) {
+        setErrorMessage("Wrong email or password");
+      }
     }
   };
 
@@ -87,10 +104,17 @@ const LoginForm = () => {
         </span>
       </p>
 
-      <div className="absolute top-10 right-10">
+      <div className="absolute top-10 right-10 z-50">
         {errorMessage && (
-          <SuccessMessageComponent
+          <ErrorMessageComponent
             message={errorMessage}
+            clearMessage={clearMessage}
+          />
+        )}
+
+        {succesMessage && (
+          <SuccessMessageComponent
+            message={succesMessage}
             clearMessage={clearMessage}
           />
         )}
