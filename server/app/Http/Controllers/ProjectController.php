@@ -561,7 +561,7 @@ class ProjectController extends Controller
                 'prompt' => $prompt,
             ]);
             
-            echo $project['choices'][0]['text'];
+            return $project['choices'][0]['text'];
 
 
         }catch(Error $e){
