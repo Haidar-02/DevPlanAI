@@ -534,6 +534,28 @@ class ProjectController extends Controller
                         don't include in your answer any other text rather than the JSON response. 
                         Do not include Certainly, here's the JSON response for your project, return just the JSON response.";
 
+            $prompt .= ", the response should be as : 
+            { 
+                'project': {
+                  'title': '',
+                  'type': '',
+                  'description': '',
+                  'deadline': '',
+                  'tasks': [
+                        {
+                          'title': '',
+                          'description': '',
+                          'deadline': ''
+                        },
+                        {
+                            'title': '',
+                            'description': '',
+                            'deadline': ''
+                        },
+                    ]
+                }
+            }";           
+
             $project = OpenAI::completions()->create([
                 'model' => 'text-davinci-003',
                 'prompt' => $prompt,
