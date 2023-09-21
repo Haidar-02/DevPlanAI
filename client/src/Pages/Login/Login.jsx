@@ -1,5 +1,8 @@
 import React from "react";
 import LoginForm from "../../Components/LoginForm/LoginForm";
+import Lottie from "lottie-react";
+import loginAnimation from "../../Assets/LottieAssets/login.json";
+import logo from "../../Assets/Landing/logo.svg";
 
 const Login = () => {
   return (
@@ -11,8 +14,23 @@ const Login = () => {
         </p>
         <LoginForm />
       </div>
-      <div className="flex-1 flex items-center justify-center h-full">
-        welcome from right
+      <div className="flex-1 flex flex-col items-center justify-center h-full w-fit">
+        <div className="self-start px-20 z-20 cursor-default">
+          <img src={logo} alt="" className="float-left animate-pulse" />
+          <h1 className="text-white text-2xl">
+            Welcome back to <strong>DevPlanAI</strong>
+          </h1>
+          <p className="text-gray-300 tracking-wider ml-16">
+            Please sign in inorder to continue
+          </p>
+        </div>
+        <div>
+          <Lottie
+            animationData={loginAnimation}
+            loop={true}
+            className="w-96 top-0 right-32 -mt-12 z-10"
+          />
+        </div>
       </div>
     </div>
   );
