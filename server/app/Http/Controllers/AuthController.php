@@ -35,7 +35,7 @@
                 }catch (\Exception $e) {
                     return response()->json([
                         'status' => 'error',
-                        'message' => 'Registration failed, try again later',
+                        'message' => 'Login failed, try again later',
                     ], 500);
                 }
             }

@@ -512,24 +512,24 @@ class ProjectController extends Controller
             }
 
                             
-            $prompt = "Generate project's description and tasks for the project with :\n";
-            $prompt .="title : " . $request->title ."\n";
-            $prompt .="type : " . $request->type ."\n";
-            $prompt .="description : " . $request->description ."\n";
-            $prompt .="deadline : " . $request->deadline ."\n";
+            $prompt = "Generate project's description and tasks for the project with :";
+            $prompt .="title : " . $request->title;
+            $prompt .=", type : " . $request->type;
+            $prompt .=", description : " . $request->description ;
+            $prompt .=", deadline : " . $request->deadline ;
 
-            $prompt .=  "return a JSON response of the resulting tasks generated and the project information.
+            $prompt .=  ", return a JSON response of the resulting tasks generated and the project information.
                         The project's start date is today, generate tasks based on that. 
                         Each generated task must have a title as title, a description as description, and a deadline as deadline. 
                         The project returned must have a title, a description, a deadline which I gave you before, and its corresponding tasks. 
                         The task title should describe the task content. 
                         Divide frontend, backend, design and testing into smaller tasks if any of them exist, and be specific in each task's title. 
-                        None of the tasks' deadlines must exceed the project's deadline. return the deadline in the form of yyyy-mm-dd. \n";
+                        None of the tasks' deadlines must exceed the project's deadline. return the deadline in the form of yyyy-mm-dd.";
 
-            $prompt .="if any of the inputs is not understandable 
-                        return a JSON response with a status error and message saying the not understandable input.\n";
+            $prompt .=", if any of the inputs is not understandable 
+                        return a JSON response with a status error and message saying the not understandable input.";
 
-            $prompt .=  "I want your answer to be a parsable JSON object do not include any text like here is your output and so on. 
+            $prompt .=  ", I want your answer to be a parsable JSON object do not include any text like here is your output and so on. 
                         Only return one response if error return error response, if not return the generated project. 
                         don't include in your answer any other text rather than the JSON response. 
                         Do not include Certainly, here's the JSON response for your project, return just the JSON response.";
@@ -539,10 +539,7 @@ class ProjectController extends Controller
                 'prompt' => $prompt,
             ]);
             
-            return response()->json([
-                'status' => 'success',
-                'project' => $project,
-            ]);
+            echo $project['choices'][0]['text'];
 
 
         }catch(Error $e){
@@ -556,22 +553,21 @@ class ProjectController extends Controller
     public function acceptGeneratedProject(Request $request)
     {
         try {
-            $data = $request->all();
-    
-            if (!isset($data['project']) || !isset($data['tasks'])) {
+            $project = $request->project;
+
+            if (!$project || !$project["tasks"]) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Invalid request data. Please provide project and tasks information.'
                 ]);
             }
     
-            $projectData = $data['project'];
-            $tasksData = $data['tasks'];
-    
+            $tasksData = $project["tasks"];
+
             $project = Project::create([
-                'title' => $projectData['title'],
-                'description' => $projectData['description'],
-                'deadline' => $projectData['deadline'],
+                'title' => $project['title'],
+                'description' => $project['description'],
+                'deadline' => $project['deadline'],
                 'project_manager_id'=>Auth::id(),
                 'is_done'=>false,
             ]);

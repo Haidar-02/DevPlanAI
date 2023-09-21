@@ -46,6 +46,7 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
     Route::post('searchMyProjects', [ProjectController::class, 'searchMyProjects']);
     Route::post('searchUsers', [ProjectController::class, 'searchUsers']);
     Route::post('acceptGeneratedProject', [ProjectController::class, 'acceptGeneratedProject']);
+    Route::post('generateProject', [ProjectController::class, 'generateProject']);
 
     Route::post('addNewTask/{project_id}', [TaskController::class, 'addNewTask']);
     Route::delete('deleteTask/{task_id}', [TaskController::class, 'deleteTask']);
