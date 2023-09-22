@@ -34,12 +34,20 @@ async function logout() {
   }
 }
 
-async function register({ name, email, password }) {
+async function register({
+  first_name,
+  last_name,
+  email,
+  password,
+  profile_picture,
+}) {
   try {
     const res = await axios.post(`${baseUrl}register`, {
-      name,
+      first_name,
+      last_name,
       email,
       password,
+      profile_picture,
     });
   } catch (error) {
     console.log(error);
