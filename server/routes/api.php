@@ -29,6 +29,7 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
 
     Route::get('profile', [UserController::class, 'profile']);
     Route::post('updateProfile', [UserController::class, 'updateProfile']);
+    Route::get('getUserGeneralInfo', [UserController::class, 'getUserGeneralInfo']);
 
     Route::get('getMyProjects', [ProjectController::class, 'getMyProjects']);
     Route::get('getMyRecentProjects', [ProjectController::class, 'getMyRecentProjects']);

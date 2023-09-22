@@ -51,7 +51,7 @@ const LoginForm = () => {
           navigate("/dashboard");
         }
       } catch (error) {
-        setErrorMessage("Wrong email or password");
+        setErrorMessage(error.response.data.message);
       }
     }
   };
@@ -97,7 +97,7 @@ const LoginForm = () => {
       <p className="text-xs mt-10 text-gray-500">
         Don't have an account ?{" "}
         <span
-          className="hover:text-[#4F5D75] cursor-pointer"
+          className="hover:text-[#4F5D75] cursor-pointer hover:underline"
           onClick={() => navigate("/signup")}
         >
           Register now

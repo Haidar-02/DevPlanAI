@@ -6,7 +6,7 @@ import logo from "../../Assets/Landing/logo.svg";
 
 const Login = () => {
   return (
-    <div className="w-full h-screen bg-[#4F5D75] flex items-center justify-between flex-wrap p-10">
+    <div className="w-full h-screen bg-[#4F5D75] flex items-center justify-between flex-wrap-reverse p-10">
       <div className="flex-2 bg-[#E3E3E3] h-full w-fit rounded-2xl p-10 flex flex-col items-center justify-center">
         <h1 className="font-bold text-[#4F5D75] text-3xl self-start">Login</h1>
         <p className="text-sm text-gray-500 self-start mt-2">

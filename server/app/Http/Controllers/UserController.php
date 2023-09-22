@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContributionRequest;
+use App\Models\Notification;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\Team;
@@ -78,5 +80,30 @@ class UserController extends Controller
                 'message' => 'Error updating profile. Try again later',
             ]);
         }
+    }
+
+    function getUserGeneralInfo() {
+        try{
+            $user = Auth::user();
+    
+            $unreadNotificationsCount = Notification::where('user_id', $user->id)
+                ->where('is_read', false)
+                ->count();
+    
+            $contributionRequestsCount = ContributionRequest::where('user_id', $user->id)->count();
+    
+            return response()->json([
+                "status"=>"success",
+                "user"=>$user,
+                'notifications'=>$unreadNotificationsCount,
+                'contribution_requests'=>$contributionRequestsCount
+            ]);
+        }catch(Error $E){
+            return response()->json([
+                "status"=>"failed",
+                'message' => 'Error getting user info. Try again later',
+            ]);
+        }
+           
     }
 }

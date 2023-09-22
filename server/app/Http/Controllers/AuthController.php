@@ -54,15 +54,6 @@
                         'profile_picture' => 'nullable',
                     ]);
             
-                    $existingUser = User::where('email', $request->email)->first();
-            
-                    if ($existingUser) {
-                        return response()->json([
-                            'status' => 'error',
-                            'message' => 'Email already in use',
-                        ], 422);
-                    }
-            
                     $user = User::create([
                         'first_name' => $request->first_name,
                         'last_name' => $request->last_name,
@@ -72,21 +63,27 @@
                         'profile_picture' => $request->profile_picture,
                     ]);
             
-                    $token = Auth::login($user);
-            
                     return response()->json([
                         'status' => 'success',
                         'message' => 'User created successfully',
                         'user' => $user,
-                        'token' => $token,
                     ]);
                 } catch (\Exception $e) {
+
+                    $existingUser = User::where('email', $request->email)->first();
+                    if ($existingUser) {
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => 'Email already in use',
+                        ], 422);
+                    }
                     return response()->json([
                         'status' => 'error',
                         'message' => 'Registration failed, try again later',
                     ], 500);
                 }
             }
+            
         
             public function logout()
             {

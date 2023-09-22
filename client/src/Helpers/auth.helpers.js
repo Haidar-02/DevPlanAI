@@ -17,7 +17,7 @@ async function login({ email, password }) {
     const data = res.data;
     return { data };
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
 
@@ -49,8 +49,9 @@ async function register({
       password,
       profile_picture,
     });
+    return res;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
 
