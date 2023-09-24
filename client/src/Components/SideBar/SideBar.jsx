@@ -10,8 +10,10 @@ import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import SidebarItem from "./SidebarItem";
 import { Avatar } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const SideBar = () => {
+  const navigate = useNavigate();
   return (
     <div className=" w-60 h-screen bg-[#2D3142] relative">
       <div className="w-full px-3 py-5 flex flex-col items-center justify-between h-full">
@@ -53,16 +55,23 @@ const SideBar = () => {
           </ul>
         </div>
         <div className="w-full flex flex-col items-center justify-center">
-          <div className="w-full flex items-center gap-2 px-2 py-1 rounded-lg cursor-pointer text-white hover:bg-gray-200 hover:text-[#2D3142] transition-all">
+          <div
+            onClick={() => navigate("/profile")}
+            className="w-full flex items-center gap-2 px-2 py-1 rounded-lg cursor-pointer text-white hover:bg-gray-200 hover:text-[#2D3142] transition-all"
+          >
             <Avatar />
-            <div>
-              <h2 className="text-sm">FirstName LastName</h2>
-              <h2 className="text-xs opacity-80">Email</h2>
+            <div className=" max-w-[170px]">
+              <h2 className="text-sm overflow-hidden overflow-ellipsis whitespace-nowrap">
+                FirstName LastName
+              </h2>
+              <h2 className="text-xs opacity-80 overflow-hidden overflow-ellipsis whitespace-nowrap">
+                Email@example.com
+              </h2>
             </div>
           </div>
-          <div className="text-white flex items-center justify-start px-4 w-full hover:bg-white hover:text-red-500 py-2 cursor-pointer rounded-full transition-all my-2 relative">
+          <div className="text-white flex items-center justify-start px-4 w-full hover:bg-white hover:text-red-500 py-2 cursor-pointer rounded-lg transition-all my-2 relative">
             <LogoutIcon />
-            <h2 className=" font-regular ml-2 tracking-wide">Logout</h2>
+            <h2 className="font-regular ml-2 tracking-wide">Logout</h2>
           </div>
         </div>
       </div>
