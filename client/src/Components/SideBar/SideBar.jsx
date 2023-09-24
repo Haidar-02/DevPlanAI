@@ -50,7 +50,7 @@ const SideBar = () => {
             <SidebarItem
               text={"Administration"}
               icon={AdminPanelSettingsIcon}
-              link={"/admin"}
+              link={"/administration"}
             />
           </ul>
         </div>

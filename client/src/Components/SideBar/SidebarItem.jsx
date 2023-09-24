@@ -5,7 +5,7 @@ const SidebarItem = ({ text, link, icon, notify, isActive }) => {
   const navigate = useNavigate();
   return (
     <li
-      onClick={() => navigate({ link })}
+      onClick={() => navigate(link)}
       className="text-white flex items-center justify-start px-4 w-full hover:bg-white hover:text-[#2D3142] py-2 cursor-pointer rounded-full transition-all my-2 relative"
     >
       {createElement(icon)}
