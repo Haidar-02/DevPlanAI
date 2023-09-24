@@ -15,6 +15,7 @@ import { getUserGeneralInfo } from "../../Helpers/user.helper";
 import ErrorMessageComponent from "../EventComponents/ErrorComponent";
 import Lottie from "lottie-react";
 import loadingLottie from "../../Assets/LottieAssets/loading.json";
+import { logout } from "../../Helpers/auth.helpers";
 
 const SideBar = () => {
   const navigate = useNavigate();
@@ -34,6 +35,9 @@ const SideBar = () => {
         console.log(response);
         if (response.data.status === "failed") {
           setErrorMessage(response.data.message);
+          if (response.data.message === "Unauthorized") {
+            navigate("/login");
+          }
         }
       } catch (error) {
         console.error("Error fetching user information: ", error);
@@ -43,6 +47,17 @@ const SideBar = () => {
 
     fetchUserInfo();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      const response = await logout();
+      localStorage.clear();
+      console.log(response);
+      navigate("/");
+    } catch (error) {
+      setErrorMessage("Error loging out");
+    }
+  };
 
   return (
     <div className=" w-60 h-screen bg-[#2D3142]">
@@ -61,31 +76,37 @@ const SideBar = () => {
               text={"Dashboard"}
               icon={DashboardIcon}
               link={"/dashboard"}
+              count={0}
             />
             <SidebarItem
               text={"My Projects"}
               icon={AccountTreeIcon}
               link={"/projects"}
+              count={0}
             />
             <SidebarItem
               text={"Create"}
               icon={CreateBoxIcon}
               link={"/create"}
+              count={0}
             />
             <SidebarItem
               text={"Team Requests"}
               icon={GroupAddIcon}
               link={"/contributions"}
+              count={userInfo?.contribution_requests}
             />
             <SidebarItem
               text={"Notifications"}
               icon={NotificationsIcon}
               link={"/notifications"}
+              count={userInfo?.notifications}
             />
             <SidebarItem
               text={"Administration"}
               icon={AdminPanelSettingsIcon}
               link={"/administration"}
+              count={0}
             />
           </ul>
         </div>
@@ -114,7 +135,10 @@ const SideBar = () => {
               <Lottie animationData={loadingLottie} />
             </div>
           )}
-          <div className="text-white flex items-center justify-start px-4 w-full hover:bg-white hover:text-red-500 py-2 cursor-pointer rounded-lg transition-all my-2 relative">
+          <div
+            onClick={handleLogout}
+            className="text-white flex items-center justify-start px-4 w-full hover:bg-white hover:text-red-500 py-2 cursor-pointer rounded-lg transition-all my-2 relative"
+          >
             <LogoutIcon />
             <h2 className="font-regular ml-2 tracking-wide">Logout</h2>
           </div>
