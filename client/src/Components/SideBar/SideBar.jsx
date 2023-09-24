@@ -16,44 +16,52 @@ import ErrorMessageComponent from "../EventComponents/ErrorComponent";
 import Lottie from "lottie-react";
 import loadingLottie from "../../Assets/LottieAssets/loading.json";
 import { logout } from "../../Helpers/auth.helpers";
+import { stringAvatar } from "../../Helpers/helpers";
 
 const SideBar = () => {
   const navigate = useNavigate();
   const clearMessage = () => {
     setErrorMessage("");
   };
+
   const [errorMessage, setErrorMessage] = useState("");
   const [userInfo, setUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [requestMade, setRequestMade] = useState(false);
+
+  async function fetchUserInfo() {
+    try {
+      const response = await getUserGeneralInfo();
+      setUserInfo(response.data);
+      setIsLoading(false);
+      if (response.data.status === "failed") {
+        setErrorMessage(response.data.message);
+        if (response.data.message === "Unauthorized") {
+          navigate("/login");
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user information: ", error);
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
-    async function fetchUserInfo() {
-      try {
-        const response = await getUserGeneralInfo();
-        setUserInfo(response.data);
-        setIsLoading(false);
-        console.log(response);
-        if (response.data.status === "failed") {
-          setErrorMessage(response.data.message);
-          if (response.data.message === "Unauthorized") {
-            navigate("/login");
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching user information: ", error);
-        setIsLoading(false);
-      }
+    if (!requestMade) {
+      fetchUserInfo();
+      setRequestMade(true);
     }
-
-    fetchUserInfo();
-  }, []);
+  }, [requestMade]);
 
   const handleLogout = async () => {
     try {
       const response = await logout();
-      localStorage.clear();
-      console.log(response);
-      navigate("/");
+      if (response.status === "error") {
+        setErrorMessage(response.message);
+      } else {
+        localStorage.clear();
+        navigate("/");
+      }
     } catch (error) {
       setErrorMessage("Error loging out");
     }
@@ -119,7 +127,11 @@ const SideBar = () => {
               {userInfo.user.profile_picture ? (
                 <Avatar src={userInfo.user.profile_picture} />
               ) : (
-                <Avatar {...stringAvatar("FirstName LastName")} />
+                <Avatar
+                  {...stringAvatar(
+                    `${userInfo.user.first_name} ${userInfo.user.last_name}`
+                  )}
+                />
               )}
               <div className="max-w-[160px]">
                 <h2 className="text-sm overflow-hidden overflow-ellipsis whitespace-nowrap">

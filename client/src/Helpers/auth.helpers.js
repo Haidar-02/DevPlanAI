@@ -24,7 +24,6 @@ async function login({ email, password }) {
 async function logout() {
   try {
     const res = await axios.post(`${baseUrl}user/logout`, undefined, auth());
-    console.log(res.data);
     if (res.status === 200) {
       const data = res.data;
       return { data };
