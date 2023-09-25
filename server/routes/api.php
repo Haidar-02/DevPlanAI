@@ -67,14 +67,14 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
     Route::get('getReadNotifications', [NotificationController::class, 'getReadNotifications']);
     Route::post('markNotificationAsRead/{notification_id}', [NotificationController::class, 'markNotificationAsRead']);
 
-    Route::group(["prefix" => "admin", "middleware" => "admin.valid"], function () {
 
+    Route::group(["prefix" => "admin", "middleware" => "admin.valid"], function () {
         Route::get("getAllProjects", [AdminController::class, "getAllProjects"]);
         Route::post("searchAllProjects", [AdminController::class, "searchAllProject"]);
         Route::delete("deleteProjectAdmin/{projectId}", [AdminController::class, "deleteProject"]);
         Route::get("getAllUsers", [AdminController::class, "getAllUsers"]);
         Route::delete("deleteUser/{userId}", [AdminController::class, "deleteUser"]);
-
+        Route::post("makeDemoteAdmin/{userId}", [AdminController::class, "makeDemoteAdmin"]);
     });
 
 });

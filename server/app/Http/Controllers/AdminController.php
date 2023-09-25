@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comments;
+use App\Models\ContributionRequest;
+use App\Models\Notification;
 use App\Models\Project;
+use App\Models\Task;
+use App\Models\Team;
 use App\Models\User;
+use Egulias\EmailValidator\Parser\Comment;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -63,8 +69,22 @@ class AdminController extends Controller
     {
         try {
             $user = User::findOrFail($userId);
+    
+            Notification::where('user_id', $user->id)->delete();
+            Task::where('assignee_id', $user->id)->delete();
+            Team::where('user_id', $user->id)->delete();
+            Comments::where('user_id', $user->id)->delete();
+            ContributionRequest::where('user_id', $user->id)->delete();
+            $projects = Project::where('project_manager_id', $user->id)->get();
+            foreach ($projects as $project) {
+                Task::where('project_id', $project->id)->delete();
+                Team::where('project_id', $project->id)->delete();
+                ContributionRequest::where('project_id', $project->id)->delete();
+                $project->delete();
+            }
+    
             $user->delete();
-
+    
             return response()->json([
                 'status' => 'success',
                 'message' => 'User deleted successfully.',
@@ -73,6 +93,35 @@ class AdminController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'An error occurred while deleting the user.',
+                'error' => $e,
+            ]);
+        }
+    }
+    
+
+    public function makeDemoteAdmin($user_id)
+    {
+        try {
+            $user = User::findOrFail($user_id);
+    
+            if ($user->user_type_id == 1) {
+                $user->user_type_id = 2;
+                $message = 'User demoted to regular user';
+            } else {
+                $user->user_type_id = 1;
+                $message = 'User promoted to admin';
+            }
+    
+            $user->save();
+    
+            return response()->json([
+                'status' => 'success',
+                'message' => $message,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while updating the user role.',
             ]);
         }
     }
