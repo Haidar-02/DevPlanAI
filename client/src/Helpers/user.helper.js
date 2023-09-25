@@ -14,4 +14,16 @@ async function getUserGeneralInfo() {
   }
 }
 
-export { getUserGeneralInfo };
+async function getProfile() {
+  try {
+    const res = await axios.get(`${baseUrl}user/profile`, auth());
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export { getUserGeneralInfo, getProfile };
