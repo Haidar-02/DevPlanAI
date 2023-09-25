@@ -6,6 +6,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { formatDateToView } from "../../Helpers/helpers";
 import SuccessMessageComponent from "../EventComponents/SuccessComponent";
+import Lottie from "lottie-react";
+import notificationLottie from "../../Assets/LottieAssets/notification.json";
 
 const UnreadComponent = () => {
   const [notifications, setNotification] = useState([]);
@@ -56,7 +58,14 @@ const UnreadComponent = () => {
       )}
       <h2 className=" font-bold">Unread Notifications</h2>
       {notifications.length === 0 ? (
-        <p className="text-sm text-gray-500">Feww, No unread notifications</p>
+        <div className="w-full h-full flex flex-col items-center justify-center">
+          <Lottie
+            animationData={notificationLottie}
+            loop={true}
+            className="w-60"
+          />
+          <p className="text-sm text-gray-500">No unread notifications</p>
+        </div>
       ) : (
         notifications.map((notification) => (
           <div
