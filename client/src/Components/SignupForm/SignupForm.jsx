@@ -19,6 +19,7 @@ const SignupForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [succesMessage, setSuccessMessage] = useState("");
   const [profilePicture, setProfilePicture] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [profile, setProfile] = useState("");
 
   const handleProfilePictureChange = async (e) => {
@@ -84,6 +85,7 @@ const SignupForm = () => {
     } else {
       setErrorMessage("");
       try {
+        setIsLoading(true);
         const response = await register({
           email: formData.email,
           password: formData.password,
@@ -91,7 +93,7 @@ const SignupForm = () => {
           last_name: formData.last_name,
           profile_picture: profile,
         });
-        console.log(response);
+        setIsLoading(false);
         if (response.data.status === "error") {
           setErrorMessage(response.data.message);
         } else {
@@ -111,6 +113,11 @@ const SignupForm = () => {
 
   return (
     <div className="flex flex-col items-center justify-startp-5 w-full overflow-y-auto overflow-x-hidden">
+      {isLoading && (
+        <div className="fixed top-0 left-0 w-full h-1">
+          <div className="h-full bg-white animate-loading-bar shadow-lg"></div>
+        </div>
+      )}
       <div className="flex flex-col justify-center items-center w-full my-2">
         <input
           type="file"
