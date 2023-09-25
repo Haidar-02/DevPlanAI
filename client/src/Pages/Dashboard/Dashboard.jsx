@@ -18,7 +18,7 @@ const Dashboard = () => {
           </h2>
           <h2>here is your DashBoard</h2>
         </div>
-        <div className="flex">
+        <div className="flex flex-wrap items-center justify-center gap-5">
           <RecentTasks />
           <RecentComments />
           <RecentProjects />
