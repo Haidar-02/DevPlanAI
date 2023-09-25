@@ -9,7 +9,6 @@ const RecentProjects = () => {
     const fetchRecentProjects = async () => {
       try {
         const response = await getRecentProjects();
-        console.log(response.data);
         setProjects(response.data.projects);
       } catch (error) {
         console.error("Error fetching recent tasks: ", error);
