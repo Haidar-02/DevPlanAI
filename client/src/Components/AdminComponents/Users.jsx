@@ -54,7 +54,6 @@ const Users = () => {
   const handleDeleteUser = async (user_id) => {
     try {
       const response = await deleteUser(user_id);
-      console.log(response);
       getUsersAdmin();
       setSuccessMessage(response.data.message);
     } catch (error) {

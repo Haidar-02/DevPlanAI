@@ -77,10 +77,26 @@ async function searchAllProjects(query) {
   }
 }
 
+async function deleteProjectAdmin(projectId) {
+  try {
+    const response = await axios.delete(
+      `${baseUrl}user/admin/deleteProjectAdmin/${projectId}`,
+      auth()
+    );
+    if (response.status === 200) {
+      const data = response.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   getAllUsers,
   searchAllUsers,
   makeDemoteAdmin,
   deleteUser,
   searchAllProjects,
+  deleteProjectAdmin,
 };

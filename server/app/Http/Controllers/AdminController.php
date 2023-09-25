@@ -10,6 +10,7 @@ use App\Models\Task;
 use App\Models\Team;
 use App\Models\User;
 use Egulias\EmailValidator\Parser\Comment;
+use Error;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -42,8 +43,20 @@ class AdminController extends Controller
     {
         try {
             $project = Project::findOrFail($projectId);
-            $project->delete();
+            $tasks = Task::where('project_id', $project->id)->get();
+            
+            foreach ($tasks as $task) {
+                Comments::where('task_id', $task->id)->delete();
+            }
+            Team::where('project_id', $project->id)->delete();
 
+            $tasks->each->delete();
+    
+            
+            ContributionRequest::where('project_id', $project->id)->delete();
+    
+            $project->delete();
+    
             return response()->json([
                 'status' => 'success',
                 'message' => 'Project deleted successfully.',
@@ -52,9 +65,11 @@ class AdminController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'An error occurred while deleting the project.',
+                'error' => $e,
             ]);
         }
     }
+    
 
     public function getAllUsers()
     {

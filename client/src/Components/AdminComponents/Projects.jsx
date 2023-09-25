@@ -1,7 +1,10 @@
 import { Avatar } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
-import { searchAllProjects } from "../../Helpers/admin.helper";
+import {
+  deleteProjectAdmin,
+  searchAllProjects,
+} from "../../Helpers/admin.helper";
 import { stringAvatar } from "../../Helpers/helpers";
 import SuccessMessageComponent from "../EventComponents/SuccessComponent";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
@@ -9,6 +12,11 @@ const Projects = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+
+  const clearMessage = () => {
+    setSuccessMessage("");
+  };
 
   const handleSearchInput = (e) => {
     const query = e.target.value;
@@ -23,6 +31,16 @@ const Projects = () => {
       setIsLoading(false);
     } catch (error) {
       console.log(error.response.data.message);
+    }
+  };
+
+  const handleDeleteProjet = async (project_id) => {
+    try {
+      const response = await deleteProjectAdmin(project_id);
+      getProjectsAdmin();
+      setSuccessMessage(response.data.message);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -84,12 +102,23 @@ const Projects = () => {
             </div>
 
             <div>
-              <button className=" bg-red-600 text-white mr-3 rounded-full hover:bg-gray-300 hover:text-red-600 transition-all text-sm">
+              <button
+                onClick={() => handleDeleteProjet(project.id)}
+                className=" bg-red-600 text-white mr-3 rounded-full hover:bg-gray-300 hover:text-red-600 transition-all text-sm"
+              >
                 <RemoveCircleIcon />
               </button>
             </div>
           </div>
         ))}
+      </div>
+      <div className="absolute top-10 right-10">
+        {successMessage && (
+          <SuccessMessageComponent
+            message={successMessage}
+            clearMessage={clearMessage}
+          />
+        )}
       </div>
     </div>
   );
