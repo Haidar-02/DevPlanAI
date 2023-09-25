@@ -6,6 +6,7 @@ const ReadComponent = () => {
       <h2 className=" font-bold">Read Notifications</h2>
       <div className="flex items-center justify-between p-3 bg-gray-200 hover:opacity-80 transition-all">
         <p className="text-sm">message</p>
+        <p className="text-gray-500 text-sm">Created_At</p>
       </div>
     </div>
   );
