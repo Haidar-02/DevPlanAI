@@ -109,12 +109,14 @@ const SideBar = () => {
               link={"/notifications"}
               count={userInfo?.notifications}
             />
-            <SidebarItem
-              text={"Administration"}
-              icon={AdminPanelSettingsIcon}
-              link={"/administration"}
-              count={0}
-            />
+            {userInfo?.user.user_type_id === 1 && (
+              <SidebarItem
+                text={"Administration"}
+                icon={AdminPanelSettingsIcon}
+                link={"/administration"}
+                count={0}
+              />
+            )}
           </ul>
         </div>
         <div className="w-full flex flex-col items-center justify-center">
