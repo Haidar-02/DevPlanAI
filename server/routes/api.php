@@ -59,6 +59,8 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
     Route::post('addTaskComment/{task_id}', [TaskController::class, 'addTaskComment']);
     Route::get('getTaskInfo/{task_id}', [TaskController::class, 'getTaskInfo']);
     Route::get('getTaskComments/{task_id}', [TaskController::class, 'getTaskComments']);
+    Route::get('getUpcomingTasks', [TaskController::class, 'getUpcomingTasks']);
+    Route::get('getRecentComments', [TaskController::class, 'getRecentComments']);
 
 
     Route::get('getUnreadNotifications', [NotificationController::class, 'getUnreadNotifications']);

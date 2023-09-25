@@ -314,4 +314,42 @@ class TaskController extends Controller
             ]);
         }
     }
+
+    public function getUpcomingTasks() {
+        $tasks = Task::where('user_id', Auth::id())
+                     ->where('is_done', false)
+                     ->orderBy('created_at', 'desc') 
+                     ->take(4)
+                     ->get();
+    
+        if ($tasks->isEmpty()) {
+            return response()->json(['status' => 'empty', 'message' => 'No upcoming tasks', 'data' => []]);
+        }
+    
+        foreach ($tasks as $task) {
+            $task->status = $task->status;
+        }
+    
+        return response()->json(['status' => 'success', 'message' => 'Upcoming tasks retrieved successfully.', 'tasks' => $tasks]);
+    }
+
+    public function getRecentComments(Request $request)
+    {
+        try {
+            $comments = Comments::with(['task.project', 'user'])
+                ->latest()
+                ->limit(2)
+                ->get();
+    
+            return response()->json([
+                'status' => 'success',
+                'comments' => $comments,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while retrieving recent comments.',
+            ]);
+        }
+    }
 }

@@ -41,7 +41,10 @@ const SideBar = () => {
         }
       }
     } catch (error) {
-      console.error("Error fetching user information: ", error);
+      console.error(
+        "Error fetching user information: ",
+        error.response.data.message
+      );
       setIsLoading(false);
     }
   }

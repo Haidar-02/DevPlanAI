@@ -40,7 +40,6 @@ class ProjectController extends Controller
         ]);
     }
 
-
     public function getMyRecentProjects(Request $request)
     {
         $user = User::findOrFail(Auth::id());
