@@ -44,4 +44,58 @@ async function markNotificationAsRead(notification_id) {
   }
 }
 
-export { markNotificationAsRead, getUnreadNotifications, getReadNotifications };
+async function getContributionRequests() {
+  try {
+    const res = await axios.get(
+      `${baseUrl}user/getMyContributionRequests`,
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function acceptRequest(request_id) {
+  try {
+    const response = await axios.post(
+      `${baseUrl}user/acceptContribution/${request_id}`,
+      undefined,
+      auth()
+    );
+    if (response.status === 200) {
+      const data = response.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function declineRequest(request_id) {
+  try {
+    const response = await axios.post(
+      `${baseUrl}user/declineContribution/${request_id}`,
+      undefined,
+      auth()
+    );
+    if (response.status === 200) {
+      const data = response.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export {
+  markNotificationAsRead,
+  getUnreadNotifications,
+  getReadNotifications,
+  getContributionRequests,
+  declineRequest,
+  acceptRequest,
+};

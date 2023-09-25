@@ -447,13 +447,6 @@ class ProjectController extends Controller
         try {
             $requests = ContributionRequest::where('user_id', Auth::id())->get();
     
-            if ($requests->isEmpty()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'No recent requests for you',
-                ]);
-            }
-    
             $requests->load('project.projectManager');
     
             return response()->json([
