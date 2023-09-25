@@ -316,7 +316,7 @@ class TaskController extends Controller
     }
 
     public function getUpcomingTasks() {
-        $tasks = Task::where('user_id', Auth::id())
+        $tasks = Task::where('assignee_id', Auth::id())
                      ->where('is_done', false)
                      ->orderBy('created_at', 'desc') 
                      ->take(4)

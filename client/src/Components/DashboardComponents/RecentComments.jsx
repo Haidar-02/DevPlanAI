@@ -3,7 +3,7 @@ import React from "react";
 
 const RecentComments = () => {
   return (
-    <div className="bg-white p-3 rounded-lg flex flex-col items-center justify-start w-96 h-56">
+    <div className="bg-white p-3 rounded-lg flex flex-col items-center justify-start w-96 h-56 overflow-auto">
       <h2 className="font-bold self-start">Recent comments</h2>
       <div className="flex w-full justify-between p-2 cursor-pointer mt-3 hover:bg-gray-200 transition-all rounded-md">
         <div className="flex gap-2">

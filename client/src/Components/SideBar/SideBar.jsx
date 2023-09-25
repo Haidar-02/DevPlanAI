@@ -27,7 +27,6 @@ const SideBar = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [userInfo, setUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [requestMade, setRequestMade] = useState(false);
 
   async function fetchUserInfo() {
     try {
@@ -50,11 +49,8 @@ const SideBar = () => {
   }
 
   useEffect(() => {
-    if (!requestMade) {
-      fetchUserInfo();
-      setRequestMade(true);
-    }
-  }, [requestMade]);
+    fetchUserInfo();
+  }, []);
 
   const handleLogout = async () => {
     try {
