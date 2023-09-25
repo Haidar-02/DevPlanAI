@@ -22,7 +22,7 @@ const RecentTasks = () => {
       {tasks?.map((task) => (
         <div
           key={task.id}
-          className="flex w-full justify-between items-center p-2 cursor-pointer mt-3 hover:bg-gray-200 transition-all rounded-md"
+          className="flex w-full justify-between items-center p-2 cursor-pointer mt-3 hover:opacity-70 bg-gray-200 transition-all rounded-md"
         >
           <div className="flex gap-2">
             <p>{task.title}</p>
