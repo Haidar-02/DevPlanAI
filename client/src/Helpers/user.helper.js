@@ -26,4 +26,24 @@ async function getProfile() {
   }
 }
 
-export { getUserGeneralInfo, getProfile };
+async function editProfile(email, first_name, last_name) {
+  try {
+    const res = await axios.post(
+      `${baseUrl}user/updateProfile`,
+      {
+        email,
+        first_name,
+        last_name,
+      },
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export { getUserGeneralInfo, getProfile, editProfile };

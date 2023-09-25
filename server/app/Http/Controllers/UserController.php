@@ -39,7 +39,7 @@ class UserController extends Controller
         
             if(!$request->email || !$request->first_name || !$request->last_name){
                 return response()->json([
-                    "status"=>"failed",
+                    "status"=>"error",
                     'message' => 'Please fill in all required fields',
                 ]);
             }
@@ -47,17 +47,16 @@ class UserController extends Controller
             $existingUser = User::where('email',$request->email)->first();
             if($existingUser && $request->email != $user->email){
                 return response()->json([
-                    "status"=>"failed",
+                    "status"=>"error",
                     'message' => 'Email already in use',
                 ]);
             }
         
             if($request->email == $user->email 
             && $request->first_name==$user->first_name 
-            && $request->last_name==$user->last_name 
-            && $request->profile_picture==$user->profile_picture){
+            && $request->last_name==$user->last_name ){
                 return response()->json([
-                    "status"=>"failed",
+                    "status"=>"neutral",
                     'message' => 'No change to profile',
                 ]);
             }
@@ -65,7 +64,6 @@ class UserController extends Controller
             $user->first_name = $request->first_name;
             $user->email = $request->email;
             $user->last_name = $request->last_name;
-            $user->profile_picture = $request->profile_picture;
 
             $user->save();
             
@@ -76,7 +74,7 @@ class UserController extends Controller
 
         }catch(Error $error){
             return response()->json([
-                "status"=>"failed",
+                "status"=>"error",
                 'message' => 'Error updating profile. Try again later',
             ]);
         }
@@ -100,7 +98,7 @@ class UserController extends Controller
             ]);
         }catch(Error $E){
             return response()->json([
-                "status"=>"failed",
+                "status"=>"error",
                 'message' => 'Error getting user info. Try again later',
             ]);
         }
