@@ -17,7 +17,7 @@ const RecentTasks = () => {
     fetchRecentTasks();
   }, []);
   return (
-    <div className="bg-white p-3 rounded-lg flex flex-col items-center justify-start w-96 h-56 overflow-auto">
+    <div className="bg-white p-3 rounded-lg flex flex-col items-center justify-start w-1/3 h-56 overflow-auto">
       <h2 className="font-bold self-start">Upcoming Tasks</h2>
       {tasks?.map((task) => (
         <div

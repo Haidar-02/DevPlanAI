@@ -54,7 +54,7 @@ class ProjectController extends Controller
 
         $mergedProjects = $projects->union($contributedProjects)
             ->orderBy('created_at', 'desc')
-            ->take(5)
+            ->take(3)
             ->get();
 
         $mergedProjects->map(function ($project) {

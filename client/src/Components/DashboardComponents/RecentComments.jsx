@@ -9,7 +9,6 @@ const RecentComments = () => {
     const fetchRecentComments = async () => {
       try {
         const response = await getRecentComments();
-        console.log(response.data);
         setComments(response.data.comments);
       } catch (error) {
         console.error("Error fetching recent tasks: ", error);
@@ -19,7 +18,7 @@ const RecentComments = () => {
     fetchRecentComments();
   }, []);
   return (
-    <div className="bg-white p-3 rounded-lg flex flex-col items-center justify-start w-96 h-56 overflow-auto">
+    <div className="bg-white p-3 rounded-lg flex flex-col items-center justify-start w-1/2 h-56 overflow-auto">
       <h2 className="font-bold self-start">Recent comments</h2>
       {comments?.map((comment) => (
         <div
@@ -36,7 +35,7 @@ const RecentComments = () => {
                 )}
               />
             )}
-            <div className="max-w-[300px]">
+            <div className="max-w-[400px]">
               <p className="text-xs text-gray-500 overflow-hidden overflow-ellipsis whitespace-nowrap">
                 Comment on {comment.task.title} in {comment.task.project.title}
               </p>
