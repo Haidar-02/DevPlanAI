@@ -22,7 +22,7 @@ class AdminValid
             return $next($request);
         }    
         return response()->json([
-                "status"=>"failed",
+                "status"=>"error",
                 'message' => 'Unauthorized',
             ]);
         }
