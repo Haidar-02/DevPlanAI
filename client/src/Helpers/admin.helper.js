@@ -54,7 +54,6 @@ async function deleteUser(userId) {
     );
     if (response.status === 200) {
       const data = response.data;
-      console.log(data);
       return { data };
     }
   } catch (error) {
@@ -62,4 +61,26 @@ async function deleteUser(userId) {
   }
 }
 
-export { getAllUsers, searchAllUsers, makeDemoteAdmin, deleteUser };
+async function searchAllProjects(query) {
+  try {
+    const response = await axios.post(
+      `${baseUrl}user/admin/searchAllProjects`,
+      { content: query },
+      auth()
+    );
+    if (response.status === 200) {
+      const data = response.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export {
+  getAllUsers,
+  searchAllUsers,
+  makeDemoteAdmin,
+  deleteUser,
+  searchAllProjects,
+};

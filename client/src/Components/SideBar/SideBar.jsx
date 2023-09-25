@@ -33,7 +33,7 @@ const SideBar = () => {
       const response = await getUserGeneralInfo();
       setUserInfo(response.data);
       setIsLoading(false);
-      if (response.data.status === "failed") {
+      if (response.data.status === "error") {
         setErrorMessage(response.data.message);
         if (response.data.message === "Unauthorized") {
           navigate("/login");
@@ -103,13 +103,16 @@ const SideBar = () => {
               link={"/contributions"}
               count={userInfo?.contribution_requests}
             />
-            <SidebarItem
-              text={"Notifications"}
-              icon={NotificationsIcon}
-              link={"/notifications"}
-              count={userInfo?.notifications}
-            />
-            {userInfo?.user.user_type_id === 1 && (
+            {userInfo && (
+              <SidebarItem
+                text={"Notifications"}
+                icon={NotificationsIcon}
+                link={"/notifications"}
+                count={userInfo?.notifications}
+              />
+            )}
+
+            {userInfo?.user && userInfo.user.user_type_id === 1 && (
               <SidebarItem
                 text={"Administration"}
                 icon={AdminPanelSettingsIcon}

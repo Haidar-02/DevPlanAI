@@ -29,6 +29,7 @@ class AdminController extends Controller
         $search = $request->input('content');
         $projects = Project::where('title', 'like', "%$search%")
             ->orWhere('description', 'like', "%$search%")
+            ->with('projectManager')
             ->get();
 
         return response()->json([

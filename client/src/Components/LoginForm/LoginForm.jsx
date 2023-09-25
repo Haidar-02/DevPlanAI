@@ -12,6 +12,8 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [succesMessage, setSuccesMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const clearMessage = () => {
     setErrorMessage("");
     setSuccesMessage("");
@@ -35,10 +37,12 @@ const LoginForm = () => {
     } else {
       setErrorMessage("");
       try {
+        setIsLoading(true);
         const response = await login({
           email: formData.email,
           password: formData.password,
         });
+        setIsLoading(false);
         if (response.data.status === "error") {
           if (response.status === 401) {
             setErrorMessage("Wrong email or password");
@@ -52,12 +56,18 @@ const LoginForm = () => {
         }
       } catch (error) {
         setErrorMessage(error.response.data.message);
+        setIsLoading(false);
       }
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center m-5 w-full">
+      {isLoading && (
+        <div className="fixed top-0 left-0 w-full h-1">
+          <div className="h-full bg-white animate-loading-bar shadow-lg"></div>
+        </div>
+      )}
       <input
         type="email"
         name="email"
