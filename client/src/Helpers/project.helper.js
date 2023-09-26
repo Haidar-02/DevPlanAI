@@ -1,5 +1,5 @@
 import axios from "axios";
-import { auth, authJSON } from "./auth.helpers";
+import { auth } from "./auth.helpers";
 const baseUrl = "http://127.0.0.1:8000/api/";
 
 async function getRecentProjects() {

@@ -322,9 +322,6 @@ class TaskController extends Controller
                      ->take(4)
                      ->get();
     
-        if ($tasks->isEmpty()) {
-            return response()->json(['status' => 'empty', 'message' => 'No upcoming tasks', 'data' => []]);
-        }
     
         foreach ($tasks as $task) {
             $task->status = $task->status;

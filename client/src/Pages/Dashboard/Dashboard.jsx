@@ -35,7 +35,7 @@ const Dashboard = () => {
       <div>
         <SideBar />
       </div>
-      <div className="p-7 flex flex-col items-start justify-start gap-10 h-screen">
+      <div className="p-7 flex flex-col items-start justify-start gap-10 h-screen w-full">
         <div className=" cursor-default">
           {userInfo && (
             <h2 className="text-xl">
@@ -48,7 +48,7 @@ const Dashboard = () => {
           )}
           <h2>here is your DashBoard</h2>
         </div>
-        <div className="flex flex-wrap items-center justify-center gap-5 overflow-auto">
+        <div className="flex flex-wrap items-center justify-center gap-5 overflow-auto w-full">
           <RecentTasks />
           <RecentComments />
           <RecentProjects />
