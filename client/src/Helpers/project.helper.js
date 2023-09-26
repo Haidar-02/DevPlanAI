@@ -72,10 +72,44 @@ async function removeContributor(project_id, user_id) {
   }
 }
 
+async function abandonProject(project_id) {
+  try {
+    const res = await axios.post(
+      `${baseUrl}user/deleteProject/${project_id}`,
+      undefined,
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function markProjectDone(project_id) {
+  try {
+    const res = await axios.post(
+      `${baseUrl}user/markProjectDone/${project_id}`,
+      undefined,
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   getRecentProjects,
   getMyProjects,
   searchMyProjects,
   getProjectInfo,
   removeContributor,
+  abandonProject,
+  markProjectDone,
 };

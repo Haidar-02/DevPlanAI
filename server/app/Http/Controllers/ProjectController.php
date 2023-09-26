@@ -116,27 +116,33 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function markProjectDone(Request $request, $projectId)
+    public function markProjectDone($projectId)
     {
-        try{
+        try {
             $project = Project::findOrFail($projectId);
             $user = Auth::user();
-
+    
             if ($user->id !== $project->project_manager_id) {
                 return response()->json([
                     'status' => "error",
                     'message' => 'Only the project manager can mark the project as done.',
                 ], 403);
             }
-
-            $project->is_done = true;
-            $project->finish_date = now();
+    
+            if ($project->is_done) {
+                $project->is_done = false;
+                $project->finish_date = null;
+            } else {
+                $project->is_done = true;
+                $project->finish_date = now();
+            }
+    
             $project->save();
-
+    
             $teamMembers = $project->team;
-
-            $notification='Project ' . $project->title . ' is marked as done';
-
+    
+            $notification = 'Project ' . $project->title . ' is marked as ' . ($project->is_done ? 'done' : 'undone');
+    
             foreach ($teamMembers as $teamMember) {
                 Notification::create([
                     'user_id' => $teamMember->id,
@@ -144,19 +150,21 @@ class ProjectController extends Controller
                     'is_read' => false,
                 ]);
             }
-
+    
             return response()->json([
                 'status' => "success",
-                'message' => 'Project marked as done!',
-                'project' =>$project,
+                'message' => 'Project marked as ' . ($project->is_done ? 'done' : 'undone') . '!',
+                'project' => $project,
             ]);
-        }catch(Error $e){
+        } catch (Error $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'An error occured try again later',
+                'message' => 'An error occurred, please try again later.',
+                'error' =>$e,
             ]);
         }
     }
+    
 
     public function editProjectInfo(Request $request, $projectId)
     {
@@ -219,17 +227,18 @@ class ProjectController extends Controller
                 ], 403);
             }
     
-            Comments::where('task_id', $project->tasks->pluck('id'))->delete();
+            $taskIds = $project->tasks->pluck('id');
+    
+            Comments::whereIn('task_id', $taskIds)->delete();
     
             Task::where('project_id', $projectId)->delete();
     
             $teamMembers = $project->team;
-
-            $notification='Project ' . $project->title . ' has been abandoned';
-
+            $notification = 'Project ' . $project->title . ' has been abandoned';
+    
             foreach ($teamMembers as $teamMember) {
                 Notification::create([
-                    'user_id' => $teamMember->id,
+                    'user_id' => $teamMember->user_id,
                     'message' => $notification,
                     'is_read' => false,
                 ]);
@@ -250,6 +259,7 @@ class ProjectController extends Controller
             ]);
         }
     }
+    
     
 
     public function addProjectContributor(Request $request, $projectId)

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
+  abandonProject,
   getProjectInfo,
+  markProjectDone,
   removeContributor,
 } from "../../Helpers/project.helper";
 import { PieChart } from "@mui/x-charts/PieChart";
@@ -77,6 +79,26 @@ const Overview = ({ project_id }) => {
       console.log(error.response.data.message);
     }
   };
+
+  const handleDeleteProject = async (projectId) => {
+    try {
+      const response = await abandonProject(projectId);
+      console.log(response);
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  };
+
+  const markProjectAsDone = async (projectId) => {
+    try {
+      const response = await markProjectDone(projectId);
+      console.log(response);
+      getProjectInformation();
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-start gap-2 overflow-hidden">
       {isLoading && (
@@ -218,12 +240,29 @@ const Overview = ({ project_id }) => {
           </div>
           {user_id == project.project_manager.id && (
             <div className="w-full flex gap-2 items-center justify-end">
-              <button className="text-white bg-red-600 px-2 py-1 rounded-md text-sm hover:opacity-80 transition-all">
+              <button
+                onClick={() => handleDeleteProject(projectId)}
+                className="text-white bg-red-600 px-2 py-1 rounded-md text-sm hover:opacity-80 transition-all"
+              >
                 <DeleteForeverIcon /> Abandon Project
               </button>
-              <button className="text-white bg-green-600 px-2 py-1 rounded-md text-sm hover:opacity-80 transition-all">
-                <CheckBoxIcon /> Mark Project Done
-              </button>
+              {!project.is_done && (
+                <button
+                  onClick={() => markProjectAsDone(projectId)}
+                  className="text-white bg-green-600 px-2 py-1 rounded-md text-sm hover:opacity-80 transition-all"
+                >
+                  <CheckBoxIcon /> Mark Project Done
+                </button>
+              )}
+
+              {project.is_done && (
+                <button
+                  onClick={() => markProjectAsDone(projectId)}
+                  className="text-white bg-gray-700 px-2 py-1 rounded-md text-sm hover:opacity-80 transition-all"
+                >
+                  <CheckBoxIcon /> UnDone Project
+                </button>
+              )}
             </div>
           )}
         </div>
