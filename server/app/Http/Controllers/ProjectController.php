@@ -413,7 +413,7 @@ class ProjectController extends Controller
     
         $projects = Project::where(function ($query) use ($searchQuery) {
             $query->where('title', 'like', '%' . $searchQuery . '%')
-                  ->orWhere('description', 'like', '%' . $searchQuery . '%');
+                ->orWhere('description', 'like', '%' . $searchQuery . '%');
         })
         ->where(function ($query) use ($userId) {
             $query->whereHas('team', function ($subquery) use ($userId) {
@@ -425,6 +425,14 @@ class ProjectController extends Controller
         ->with('team')
         ->get();
     
+        $projects->each(function ($project) {
+            $doneTasksCount = $project->tasks()->where('is_done', true)->count();
+            $pendingTasksCount = $project->tasks()->where('is_done', false)->count();
+    
+            $project->done_tasks_count = $doneTasksCount;
+            $project->pending_tasks_count = $pendingTasksCount;
+        });
+
         $projects->map(function ($project) {
             $project->status = $project->status;
             return $project;
@@ -434,6 +442,7 @@ class ProjectController extends Controller
             'projects' => $projects,
         ]);
     }
+    
 
     public function getMyContributionRequests()
     {
