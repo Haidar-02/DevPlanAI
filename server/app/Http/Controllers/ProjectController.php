@@ -424,13 +424,6 @@ class ProjectController extends Controller
         ->with('projectManager')
         ->with('team')
         ->get();
-
-        if ($projects->isEmpty()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'No such project in your projects',
-            ]);
-        }
     
         $projects->map(function ($project) {
             $project->status = $project->status;
