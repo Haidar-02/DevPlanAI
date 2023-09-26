@@ -336,7 +336,10 @@ class TaskController extends Controller
     public function getRecentComments(Request $request)
     {
         try {
-            $comments = Comments::with(['task.project', 'user'])
+            $comments = Comments::whereHas('task', function ($query) {
+                    $query->where('assignee_id', Auth::id());
+                })
+                ->with(['task.project', 'user'])
                 ->latest()
                 ->limit(2)
                 ->get();
@@ -351,5 +354,6 @@ class TaskController extends Controller
                 'message' => 'An error occurred while retrieving recent comments.',
             ]);
         }
-    }
+    }   
+    
 }

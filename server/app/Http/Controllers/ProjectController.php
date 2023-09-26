@@ -9,10 +9,12 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\Team;
 use App\Models\User;
+use DateTime;
 use Egulias\EmailValidator\Parser\Comment;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Validator;
 use OpenAI\Laravel\Facades\OpenAI as OpenAI;
 
@@ -507,6 +509,8 @@ class ProjectController extends Controller
     function generateProject(Request $request){
 
         try{
+            $startDate = new DateTime();
+            $startDateFormatted = $startDate->format('Y-m-d');
 
             if(!$request->title||!$request->type||!$request->deadline||!$request->description){
                 return response()->json([
@@ -517,57 +521,56 @@ class ProjectController extends Controller
 
                             
             $prompt = "Generate project's description and tasks for the project with :";
-            $prompt .="title : " . $request->title;
-            $prompt .=", type : " . $request->type;
-            $prompt .=", description : " . $request->description ;
-            $prompt .=", deadline : " . $request->deadline ;
-
+            $prompt .= "title : " . $request->title;
+            $prompt .= ", type : " . $request->type;
+            $prompt .= ", description : " . $request->description;
+            $prompt .= ", deadline : " . $request->deadline;
+            $prompt .= ", start_date : " . $startDateFormatted;
+            
             $prompt .=  ", return a JSON response of the resulting tasks generated and the project information.
-                        The project's start date is today, generate tasks based on that. 
+                        The project starts from the start date and ends at the deadline prompted above. Distribute tasks' deadlines between start date and the project deadline, considering design patterns.
                         Each generated task must have a title as title, a description as description, and a deadline as deadline. 
-                        The project returned must have a title, a description, a deadline which I gave you before, and its corresponding tasks. 
+                        The project returned must have a title, a description, a deadline which I gave you before, and its corresponding tasks.
                         The task title should describe the task content. 
-                        Divide frontend, backend, design and testing into smaller tasks if any of them exist, and be specific in each task's title. 
-                        None of the tasks' deadlines must exceed the project's deadline. return the deadline in the form of yyyy-mm-dd.";
-
-            $prompt .=", if any of the inputs is not understandable 
-                        return a JSON response with a status error and message saying the not understandable input.";
-
-            $prompt .=  ", I want your answer to be a parsable JSON object do not include any text like here is your output and so on. 
-                        Only return one response if error return error response, if not return the generated project. 
-                        don't include in your answer any other text rather than the JSON response. 
-                        Do not include Certainly, here's the JSON response for your project, return just the JSON response.";
-
-            $prompt .= ", the response should be as : 
-            { 
-                'project': {
-                  'title': '',
-                  'type': '',
-                  'description': '',
-                  'deadline': '',
-                  'tasks': [
+                        Divide frontend, backend, design, and testing into smaller tasks if any of them exist, and be specific in each task's title. 
+                        None of the tasks' deadlines must exceed the project's deadline. Return the deadline in the form of yyyy-mm-dd.";
+            
+            $prompt .= ", if any of the inputs is not understandable 
+                        return a JSON response with a status error and a message saying the input is not understandable.";
+            
+            $prompt .=  ", I want your answer to be a parsable JSON object. Do not include any text like 'here is your output,' and so on. 
+                        Only return one response. If there is an error, return an error response. If not, return the generated project. 
+                        Do not include in your answer any other text rather than the JSON response.";
+            
+            $prompt .= ', the response should be as : 
                         {
-                          'title': '',
-                          'description': '',
-                          'deadline': ''
-                        },
-                        {
-                            'title': '',
-                            'description': '',
-                            'deadline': ''
-                        },
-                    ]
-                }
-            }";           
+                            "project": {
+                                "title": "",
+                                "type": "",
+                                "description": "",
+                                "deadline": "",
+                                "tasks": [
+                                    {
+                                        "title": "",
+                                        "description": "",
+                                        "deadline": ""
+                                    },
+                                    {
+                                        "title": "",
+                                        "description": "",
+                                        "deadline": ""
+                                    }
+                                ]
+                            }
+                        }';
 
             $project = OpenAI::completions()->create([
+                'max_tokens'=>2048,
                 'model' => 'text-davinci-003',
                 'prompt' => $prompt,
             ]);
             
             return $project['choices'][0]['text'];
-
-
         }catch(Error $e){
             return response()->json([
                 'status' => 'error',
@@ -579,34 +582,43 @@ class ProjectController extends Controller
     public function acceptGeneratedProject(Request $request)
     {
         try {
-            $project = $request->project;
-
-            if (!$project || !$project["tasks"]) {
+            $projectData = $request->input('project');
+    
+            if (!$projectData || !isset($projectData['tasks'])) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Invalid request data. Please provide project and tasks information.'
                 ]);
             }
     
-            $tasksData = $project["tasks"];
-
+            $tasksData = $projectData['tasks'];
+    
             $project = Project::create([
-                'title' => $project['title'],
-                'description' => $project['description'],
-                'deadline' => $project['deadline'],
-                'project_manager_id'=>Auth::id(),
-                'is_done'=>false,
+                'title' => $projectData['title'],
+                'description' => $projectData['description'],
+                'deadline' => $projectData['deadline'],
+                'project_manager_id' => Auth::id(),
+                'is_done' => false,
             ]);
     
-            foreach ($tasksData as $taskData) {
+            foreach ($tasksData as &$taskData) {
+                $deadline = $taskData['deadline'];
+                if (!strtotime($deadline)) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Invalid task deadline format for task: ' . $taskData['title'],
+                    ]);
+                }
+                $deadline = date('Y-m-d', strtotime($deadline));
                 Task::create([
-                    'title' => $taskData['title'],
-                    'description' => $taskData['description'],
-                    'deadline' => $taskData['deadline'],
-                    'project_id' => $project->id,
-                ]);
+                    'project_id'=>$project['id'],
+                    'title'=>$project['id'],
+                    'description'=>$taskData['description'],
+                    'deadline'=>$deadline,
+                    'assignee_id'=>null,
+                    'is_done'=>false,
+                ]); 
             }
-    
             return response()->json([
                 'status' => 'success',
                 'message' => 'Project and tasks added successfully.',
@@ -615,10 +627,10 @@ class ProjectController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'An error occurred while adding the project and tasks.'
+                'message' => 'An error occurred while adding the project and tasks.',
+                'error' => $e,
             ]);
         }
     }
-    
     
 }

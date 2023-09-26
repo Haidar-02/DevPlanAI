@@ -20,9 +20,12 @@ import {
 import SuccessMessageComponent from "../EventComponents/SuccessComponent";
 import ErrorMessageComponent from "../EventComponents/ErrorComponent";
 import AddContributorModal from "../Modals/AddContributorModal";
+import { useNavigate } from "react-router-dom";
 
 const Overview = ({ project_id }) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleOpenModal = () => {
     setIsOpen(true);
@@ -83,7 +86,9 @@ const Overview = ({ project_id }) => {
   const handleDeleteProject = async (projectId) => {
     try {
       const response = await abandonProject(projectId);
-      console.log(response);
+      if (response.data.status === "success") {
+        navigate("/projects");
+      }
     } catch (error) {
       console.log(error.response.data.message);
     }
@@ -92,7 +97,6 @@ const Overview = ({ project_id }) => {
   const markProjectAsDone = async (projectId) => {
     try {
       const response = await markProjectDone(projectId);
-      console.log(response);
       getProjectInformation();
     } catch (error) {
       console.log(error.response.data.message);
