@@ -17,8 +17,19 @@ import {
 } from "../../Helpers/helpers";
 import SuccessMessageComponent from "../EventComponents/SuccessComponent";
 import ErrorMessageComponent from "../EventComponents/ErrorComponent";
+import AddContributorModal from "../Modals/AddContributorModal";
 
 const Overview = ({ project_id }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsOpen(true);
+  };
+
+  const onRequestClose = () => {
+    setIsOpen(false);
+  };
+
   const [project, setProject] = useState();
   const [done, setDone] = useState(0);
   const [pending, setPending] = useState(0);
@@ -164,7 +175,10 @@ const Overview = ({ project_id }) => {
               <div className="flex items-center justify-between w-full">
                 <h2 className="font-medium">Team</h2>
                 {user_id == project.project_manager.id && (
-                  <button className="text-green-500 hover:opacity-80">
+                  <button
+                    onClick={() => handleOpenModal()}
+                    className="text-green-500 hover:opacity-80"
+                  >
                     <CreateBoxIcon />
                   </button>
                 )}
@@ -228,6 +242,12 @@ const Overview = ({ project_id }) => {
           />
         )}
       </div>
+      <AddContributorModal
+        isOpen={isOpen}
+        onRequestClose={onRequestClose}
+        projectId={projectId}
+        fetchProjectData={getProjectInformation}
+      />
     </div>
   );
 };

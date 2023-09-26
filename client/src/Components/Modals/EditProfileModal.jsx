@@ -33,7 +33,6 @@ const EditProfileModal = ({ isOpen, onRequestClose, user, fetchUserData }) => {
   };
 
   const handleEditProfile = async () => {
-    console.log(formData);
     if (
       formData.email === "" ||
       formData.first_name === "" ||
@@ -50,7 +49,6 @@ const EditProfileModal = ({ isOpen, onRequestClose, user, fetchUserData }) => {
           formData.first_name,
           formData.last_name
         );
-        console.log(response);
         if (response.data.status === "error") {
           setErrorMessage(response.data.message);
           return;
