@@ -21,7 +21,7 @@ const ProjectOverview = () => {
   return (
     <div className="flex">
       <SideBar />
-      <div className="w-full h-screen p-7">
+      <div className="h-screen p-7 flex-grow">
         <div className="w-full flex items-center justify-center gap-5 p-3">
           <div
             onClick={() => togglePage("overview")}
@@ -44,7 +44,7 @@ const ProjectOverview = () => {
             Tasks
           </div>
         </div>
-        <div className="p-10">
+        <div>
           {overview && <Overview project_id={project_id} />}
           {tasks && <Tasks project_id={project_id} />}
         </div>

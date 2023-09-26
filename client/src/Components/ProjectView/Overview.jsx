@@ -104,7 +104,7 @@ const Overview = ({ project_id }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-start gap-2 overflow-hidden">
+    <div className=" flex flex-col items-center justify-start gap-2 overflow-hidden">
       {isLoading && (
         <div className="fixed top-0 left-0 w-full h-1">
           <div className="h-full bg-white animate-loading-bar shadow-lg"></div>

@@ -40,13 +40,13 @@ const GeneratedProjectModal = ({ isOpen, onRequestClose, project }) => {
       </div>
       <div className="p-3">
         <h2>Generated Tasks</h2>
-        <div className="p-4 w-[750px] overflow-auto flex-wrap flex items-center justify-start cursor-default gap-3">
+        <div className="p-4 w-full overflow-auto flex-wrap flex items-center justify-start cursor-default gap-3">
           {project.project.tasks.map((task, index) => (
             <div
               key={index}
-              className="p-3 bg-[#2D3142] rounded-md text-white w-[300px] flex flex-col items-center justify-between hover:bg-opacity-80 transition-all"
+              className="p-3 bg-[#2D3142] rounded-md text-white w-[400px] flex flex-col items-center justify-between hover:bg-opacity-80 transition-all"
             >
-              <p className="bg-white text-gray-500 px-2 rounded-md w-fit">
+              <p className="bg-white text-gray-800 rounded-md w-full text-center">
                 {task.title}
               </p>
               <p className="mt-2 text-sm text-red-300">

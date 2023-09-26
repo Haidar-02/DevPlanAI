@@ -73,18 +73,15 @@ const MyProjects = () => {
           />
         </div>
         <div className=" h-[400px] w-full p-5 bg-white rounded-lg overflow-auto flex items-start justify-center gap-3 flex-wrap">
-          {projects.length === 0 ? (
+          {!isLoading && projects.length === 0 ? (
             <div className="flex flex-col items-center justify-center">
               <Lottie animationData={noProjects} loop={true} className="w-64" />
               <p className="text-sm text-gray-500">No projects found</p>
             </div>
           ) : (
-            projects.map((project) => (
-              <Link to={`/project-overview/${project.id}`}>
-                <div
-                  key={project.id}
-                  className="w-[300px] h-[200px] bg-[#4F5D75] hover:bg-[#677897] cursor-pointer transition-all rounded-md flex flex-col items start justify-between p-2 text-white overflow-auto"
-                >
+            projects?.map((project) => (
+              <Link key={project.id} to={`/project-overview/${project.id}`}>
+                <div className="w-[300px] h-[200px] bg-[#4F5D75] hover:bg-[#677897] cursor-pointer transition-all rounded-md flex flex-col items start justify-between p-2 text-white overflow-auto">
                   <p className="flex items-center justify-between">
                     {project.title}{" "}
                     <span
