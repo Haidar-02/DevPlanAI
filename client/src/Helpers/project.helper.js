@@ -1,5 +1,5 @@
 import axios from "axios";
-import { auth } from "./auth.helpers";
+import { auth, authJSON } from "./auth.helpers";
 const baseUrl = "http://127.0.0.1:8000/api/";
 
 async function getRecentProjects() {
@@ -104,6 +104,45 @@ async function markProjectDone(project_id) {
   }
 }
 
+async function generateProjectAI({ title, type, description, deadline }) {
+  try {
+    const res = await axios.post(
+      `${baseUrl}user/generateProject`,
+      {
+        title: title,
+        description: description,
+        type: type,
+        deadline: deadline,
+      },
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function acceptProject({ project }) {
+  try {
+    const res = await axios.post(
+      `${baseUrl}user/acceptGeneratedProject`,
+      {
+        project,
+      },
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   getRecentProjects,
   getMyProjects,
@@ -112,4 +151,6 @@ export {
   removeContributor,
   abandonProject,
   markProjectDone,
+  generateProjectAI,
+  acceptProject,
 };

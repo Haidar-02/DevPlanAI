@@ -7,6 +7,15 @@ const auth = () => {
     headers: { Authorization: `Bearer ${token}` },
   };
 };
+const authJSON = () => {
+  const token = localStorage.getItem("token");
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+};
 
 async function login({ email, password }) {
   try {
@@ -54,4 +63,4 @@ async function register({
   }
 }
 
-export { login, auth, logout, register };
+export { login, auth, logout, register, authJSON };
