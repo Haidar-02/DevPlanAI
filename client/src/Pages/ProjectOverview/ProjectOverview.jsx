@@ -3,27 +3,21 @@ import { useParams } from "react-router-dom";
 import SideBar from "../../Components/SideBar/SideBar";
 import Overview from "../../Components/ProjectView/Overview";
 import Tasks from "../../Components/ProjectView/Tasks";
-import Contributors from "../../Components/ProjectView/Contributors";
 
 const falseState = {
   overview: false,
   tasks: false,
-  contributors: false,
 };
 const ProjectOverview = () => {
   const { project_id } = useParams();
-
-  const [isLoading, setIsLoading] = useState(false);
-
   const [state, setState] = useState({
     overview: true,
     tasks: false,
-    contributors: false,
   });
   const togglePage = (page) => {
     setState({ ...falseState, [page]: true });
   };
-  const { overview, tasks, contributors } = state;
+  const { overview, tasks } = state;
   return (
     <div className="flex">
       <SideBar />
@@ -49,21 +43,10 @@ const ProjectOverview = () => {
           >
             Tasks
           </div>
-          <div
-            onClick={() => togglePage("contributors")}
-            className={`p-2 px-3 rounded-full ${
-              contributors
-                ? "bg-[#2D3142] text-white"
-                : " text-[#2D3142] hover:bg-[#2D3142] hover:text-white"
-            } cursor-pointer transition-all`}
-          >
-            Contributors
-          </div>
         </div>
         <div className="p-10">
-          {overview && <Overview />}
-          {tasks && <Tasks />}
-          {contributors && <Contributors />}
+          {overview && <Overview project_id={project_id} />}
+          {tasks && <Tasks project_id={project_id} />}
         </div>
       </div>
     </div>

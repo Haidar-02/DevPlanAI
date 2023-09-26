@@ -51,6 +51,7 @@ const LoginForm = () => {
           }
         } else {
           localStorage.setItem("token", response.data.token);
+          localStorage.setItem("user_id", response.data.user.id);
           setSuccesMessage("Login successful");
           navigate("/dashboard");
         }

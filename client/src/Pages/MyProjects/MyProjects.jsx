@@ -3,7 +3,7 @@ import SideBar from "../../Components/SideBar/SideBar";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 import { searchMyProjects } from "../../Helpers/project.helper";
 import { Avatar } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import {
   formatDateToView,

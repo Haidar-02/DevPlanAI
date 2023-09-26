@@ -1,6 +1,6 @@
 import React from "react";
 
-const Tasks = () => {
+const Tasks = ({ project_id }) => {
   return <div>Tasks</div>;
 };
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Contributors = () => {
+const Contributors = ({ project_id }) => {
   return <div>Contributors</div>;
 };
 

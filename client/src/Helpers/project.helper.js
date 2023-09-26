@@ -25,7 +25,6 @@ async function getMyProjects() {
     throw error;
   }
 }
-
 async function searchMyProjects(query) {
   try {
     const res = await axios.post(
@@ -42,4 +41,41 @@ async function searchMyProjects(query) {
   }
 }
 
-export { getRecentProjects, getMyProjects, searchMyProjects };
+async function getProjectInfo(project_id) {
+  try {
+    const res = await axios.get(
+      `${baseUrl}user/getProjectInfo/${project_id}`,
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function removeContributor(project_id, { user_id }) {
+  try {
+    const res = await axios.get(
+      `${baseUrl}user/removeProjectContributer/${project_id}`,
+      { user_id },
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export {
+  getRecentProjects,
+  getMyProjects,
+  searchMyProjects,
+  getProjectInfo,
+  removeContributor,
+};
