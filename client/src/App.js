@@ -11,6 +11,7 @@ import CreateNew from "./Pages/GenerateProject/CreateNew";
 import MyProjects from "./Pages/MyProjects/MyProjects";
 import Notifications from "./Pages/Notifications/Notifications";
 import Profile from "./Pages/Profile/Profile";
+import ProjectOverview from "./Pages/ProjectOverview/ProjectOverview";
 
 function App() {
   return (
@@ -26,6 +27,10 @@ function App() {
         <Route path="/administration" element={<Admin />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/project-overview/:project_id"
+          element={<ProjectOverview />}
+        />
       </Routes>
     </Router>
   );
