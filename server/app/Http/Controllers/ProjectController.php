@@ -293,40 +293,40 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function removeProjectContributer(Request $request, $projectId)
+    public function removeProjectContributor(Request $request, $projectId)
     {
         $project = Project::findOrFail($projectId);
         $user = Auth::user();
-
+    
         if ($user->id !== $project->project_manager_id) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Only the project manager can remove contributors.',
             ], 403);
         }
-        if(!$request->user_id){
+        
+        $userIdToRemove = $request->input('user_id');
+    
+        if (!$userIdToRemove) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'No contributor selected',
+                'message' => 'No contributor selected.',
             ]);
         }
-
-        $checkExistance = Team::where('user_id', $request->user_id)->where('project_id', $projectId);
-        if($checkExistance){
+    
+        $teamMember = Team::where('project_id', $projectId)->where('user_id', $userIdToRemove)->first();
+    
+        if (!$teamMember) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Member not in your team',
+                'message' => 'Member not in the project team.',
             ]);
         }
-
-        $assigned_tasks=Task::where('project_id', $projectId)->where('assignee_id', $request->user_id);
-
-        foreach($assigned_tasks as $task){
-            $task->assignee_id=null;
-        }
-
-        Team::where('project_id', $projectId)->where('user_id', $request->user_id)->delete();
-
+    
+        Task::where('project_id', $projectId)->where('assignee_id', $userIdToRemove)->update(['assignee_id' => null]);
+    
+        $teamMember->delete();
+    
         return response()->json([
             'status' => 'success',
             'message' => 'Contributor removed from the project successfully.',

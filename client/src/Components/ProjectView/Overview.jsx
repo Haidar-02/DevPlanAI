@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getProjectInfo } from "../../Helpers/project.helper";
+import {
+  getProjectInfo,
+  removeContributor,
+} from "../../Helpers/project.helper";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { Avatar } from "@mui/material";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
@@ -12,6 +15,8 @@ import {
   getStatusColor,
   stringAvatar,
 } from "../../Helpers/helpers";
+import SuccessMessageComponent from "../EventComponents/SuccessComponent";
+import ErrorMessageComponent from "../EventComponents/ErrorComponent";
 
 const Overview = ({ project_id }) => {
   const [project, setProject] = useState();
@@ -22,6 +27,13 @@ const Overview = ({ project_id }) => {
   const user_id = localStorage.getItem("user_id");
 
   const [isLoading, setIsLoading] = useState(false);
+  const [successessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const clearMessage = () => {
+    setSuccessMessage("");
+    setErrorMessage("");
+  };
 
   const getProjectInformation = async () => {
     try {
@@ -40,6 +52,20 @@ const Overview = ({ project_id }) => {
   useEffect(() => {
     getProjectInformation();
   }, []);
+
+  const handleRemoveContributor = async (projectId, user_id) => {
+    try {
+      const response = await removeContributor(projectId, user_id);
+      if (response.data.status === "success") {
+        setSuccessMessage(response.data.message);
+        getProjectInformation();
+      } else {
+        setErrorMessage(response.data.message);
+      }
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  };
   return (
     <div className="flex flex-col items-center justify-start gap-2 overflow-hidden">
       {isLoading && (
@@ -67,6 +93,11 @@ const Overview = ({ project_id }) => {
               <span className="text-sm text-red-500">
                 Deadline: {formatDateToView(project.deadline)}
               </span>
+              {project.finish_date && (
+                <span className="text-sm text-green-500">
+                  Finish Date: {formatDateToView(project.finish_date)}
+                </span>
+              )}
             </div>
           </div>
           <div className="mt-2 w-[500px]">
@@ -99,7 +130,7 @@ const Overview = ({ project_id }) => {
           </div>
           <div className="flex items-center justify-between h-[350px]">
             <div className="flex-col flex items-start justify-start mt-3">
-              <p className="font-medium">Task Completion</p>
+              <p className="font-medium">Tasks Completion</p>
               <PieChart
                 series={[
                   {
@@ -141,7 +172,7 @@ const Overview = ({ project_id }) => {
               {project.team.map((teamMember) => (
                 <div
                   key={teamMember.id}
-                  className="w-full flex p-2 bg-gray-200 rounded-md items-center justify-between"
+                  className="w-full flex p-2 bg-gray-200 hover:bg-gray-300 transition-all rounded-md items-center justify-between"
                 >
                   <div className="flex items-center gap-2 justify-start">
                     <Avatar
@@ -157,9 +188,16 @@ const Overview = ({ project_id }) => {
                       </p>
                     </div>
                   </div>
-                  <button className="text-red-500 hover:opacity-80">
-                    <CancelIcon />
-                  </button>
+                  {user_id == project.project_manager.id && (
+                    <button
+                      onClick={() =>
+                        handleRemoveContributor(projectId, teamMember.id)
+                      }
+                      className="text-red-500 hover:opacity-80"
+                    >
+                      <CancelIcon />
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
@@ -176,6 +214,20 @@ const Overview = ({ project_id }) => {
           )}
         </div>
       )}
+      <div className="absolute top-10 right-10">
+        {successessage && (
+          <SuccessMessageComponent
+            message={successessage}
+            clearMessage={clearMessage}
+          />
+        )}
+        {errorMessage && (
+          <ErrorMessageComponent
+            message={errorMessage}
+            clearMessage={clearMessage}
+          />
+        )}
+      </div>
     </div>
   );
 };

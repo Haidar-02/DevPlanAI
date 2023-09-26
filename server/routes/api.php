@@ -40,7 +40,7 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
     Route::post('deleteProject/{project_id}', [ProjectController::class, 'deleteProject']);
     Route::post('editProjectInfo/{project_id}', [ProjectController::class, 'editProjectInfo']);
     Route::post('addProjectContributor/{project_id}', [ProjectController::class, 'addProjectContributor']);
-    Route::post('removeProjectContributer/{project_id}', [ProjectController::class, 'removeProjectContributer']);
+    Route::post('removeProjectContributor/{project_id}', [ProjectController::class, 'removeProjectContributor']);
     Route::post('acceptContribution/{contribution_id}', [ProjectController::class, 'acceptContribution']);
     Route::post('declineContribution/{contribution_id}', [ProjectController::class, 'declineContribution']);
     Route::get('getMyContributionRequests', [ProjectController::class, 'getMyContributionRequests']);

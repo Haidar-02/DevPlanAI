@@ -56,10 +56,10 @@ async function getProjectInfo(project_id) {
   }
 }
 
-async function removeContributor(project_id, { user_id }) {
+async function removeContributor(project_id, user_id) {
   try {
-    const res = await axios.get(
-      `${baseUrl}user/removeProjectContributer/${project_id}`,
+    const res = await axios.post(
+      `${baseUrl}user/removeProjectContributor/${project_id}`,
       { user_id },
       auth()
     );
