@@ -105,14 +105,14 @@ const Overview = ({ project_id }) => {
   };
 
   return (
-    <div className=" flex flex-col items-center justify-start gap-2 overflow-hidden">
+    <div className="flex flex-col items-center justify-start gap-2 overflow-hidden">
       {isLoading && (
         <div className="fixed top-0 left-0 w-full h-1">
           <div className="h-full bg-white animate-loading-bar shadow-lg"></div>
         </div>
       )}
       {project && (
-        <div className="w-full p-2 flex-col justify-start items-center cursor-default h-[440px] overflow-auto">
+        <div className="w-full p-2 flex-col justify-start items-center cursor-default h-[480px] p-5 bg-white rounded-xl overflow-auto">
           <div className="w-full flex justify-between items-center pb-3 border-b-2 border-b-gray-600 cursor-default">
             <h2 className="text-lg font-medium text-[#2D3142]">
               {project.title}
@@ -198,9 +198,9 @@ const Overview = ({ project_id }) => {
                 height={300}
               />
             </div>
-            <div className="w-[400px] h-[200px] overflow-auto p-3 bg-white rounded-lg flex flex-col items-center justify-start gap-2">
+            <div className="w-[400px] h-[200px] overflow-auto p-3 bg-gray-500 rounded-lg flex flex-col items-center justify-start gap-2">
               <div className="flex items-center justify-between w-full">
-                <h2 className="font-medium">Team</h2>
+                <h2 className="font-medium text-white">Team</h2>
                 {user_id == project.project_manager.id && (
                   <button
                     onClick={() => handleOpenModal()}
