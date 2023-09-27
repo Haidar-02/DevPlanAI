@@ -627,8 +627,7 @@ class ProjectController extends Controller
                 }
                 $deadline = date('Y-m-d', strtotime($deadline));
                 Task::create([
-                    'project_id'=>$project['id'],
-                    'title'=>$project['id'],
+                    'title'=>$taskData['title'],
                     'description'=>$taskData['description'],
                     'deadline'=>$deadline,
                     'assignee_id'=>null,

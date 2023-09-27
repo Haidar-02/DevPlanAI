@@ -230,7 +230,7 @@ const Overview = ({ project_id }) => {
                         </p>
                       </div>
                     </div>
-                    {user_id === project.project_manager.id && (
+                    {user_id == project?.project_manager.id && (
                       <button
                         onClick={() =>
                           handleRemoveContributor(projectId, teamMember.id)

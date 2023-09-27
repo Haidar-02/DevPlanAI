@@ -21,6 +21,8 @@ const Tasks = ({ project_id }) => {
   useEffect(() => {
     getProjectTasks(project_id);
   }, []);
+
+  console.log(tasks);
   return (
     <div className="flex flex-col items-center justify-start gap-10">
       <div className="w-full text-center text-xl bg-white rounded-full p-2 text-[#4F5D75] shadow-lg">

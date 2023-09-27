@@ -24,7 +24,7 @@ import ErrorMessageComponent from "../../Components/EventComponents/ErrorCompone
 import SuccessMessageComponent from "../../Components/EventComponents/SuccessComponent";
 import AddAssigneeModal from "../../Components/Modals/AddAssigneeModal";
 import Lottie from "lottie-react";
-
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 const TaskOverview = () => {
   const { taskId } = useParams();
   const pm_id = localStorage.getItem("pm_id");
@@ -150,7 +150,15 @@ const TaskOverview = () => {
       )}
       <SideBar />
       <div className="h-full p-7 flex-grow cursor-default">
-        <h2 className="text-2xl">Task Overview</h2>
+        <div className="flex items-center justify-start gap-2">
+          <button
+            className="hover:opacity-80"
+            onClick={() => navigate(`/project-overview/${projectId}`)}
+          >
+            <ArrowBackIcon />
+          </button>
+          <h2 className="text-2xl">Task Overview</h2>
+        </div>
         {task && (
           <div className="w-full flex items border-b-2 border-b-gray-800 pb-2 justify-between mt-10">
             <div className="flex items-end justify-start gap-3">
