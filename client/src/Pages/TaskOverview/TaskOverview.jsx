@@ -6,6 +6,7 @@ import AddBox from "@mui/icons-material/AddBox";
 import Cancel from "@mui/icons-material/Cancel";
 import CommentIcon from "@mui/icons-material/Comment";
 import Send from "@mui/icons-material/Send";
+import notification from "../../Assets/LottieAssets/notification.json";
 import {
   addComment,
   deleteTask,
@@ -22,6 +23,7 @@ import {
 import ErrorMessageComponent from "../../Components/EventComponents/ErrorComponent";
 import SuccessMessageComponent from "../../Components/EventComponents/SuccessComponent";
 import AddAssigneeModal from "../../Components/Modals/AddAssigneeModal";
+import Lottie from "lottie-react";
 
 const TaskOverview = () => {
   const { taskId } = useParams();
@@ -251,9 +253,9 @@ const TaskOverview = () => {
           <div className="flex flex-col items-center justify-center gap-5 overflow-auto">
             <div className="w-[500px] h-[300px] mt-5 bg-white rounded-lg p-3 shadow-lg">
               <h2 className="font-bold">Comments</h2>
-              <div className="flex flex-col h-[250px] items-center overflow-auto justify-start gap-3 p-2">
-                {comments &&
-                  comments?.map((comment) => (
+              {comments && comments.length > 0 ? (
+                <div className="flex flex-col h-[250px] items-center overflow-auto justify-start gap-3 p-2">
+                  {comments.map((comment) => (
                     <div
                       key={comment.id}
                       className="flex w-full items-center justify-between px-3 py-1 mt-2 bg-gray-200 rounded-md"
@@ -277,7 +279,19 @@ const TaskOverview = () => {
                       </div>
                     </div>
                   ))}
-              </div>
+                </div>
+              ) : (
+                <div className=" w-full h-full flex items-center justify-center">
+                  <Lottie
+                    animationData={notification}
+                    loop={true}
+                    className="w-[200px]"
+                  />
+                  <p className="text-sm text-gray-500 mt-2">
+                    No comments on this task
+                  </p>
+                </div>
+              )}
             </div>
             <div className="relative w-full flex items-center justify-between gap-3">
               <input
