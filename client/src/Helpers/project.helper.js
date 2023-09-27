@@ -174,6 +174,20 @@ async function addContributer(project_id, { user_id }) {
     throw error;
   }
 }
+async function getAllProjectTasks(project_id) {
+  try {
+    const res = await axios.get(
+      `${baseUrl}user/getProjectTasks/${project_id}`,
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
 
 export {
   getRecentProjects,
@@ -185,6 +199,7 @@ export {
   markProjectDone,
   generateProjectAI,
   acceptProject,
+  getAllProjectTasks,
   searchUsersForCont,
   addContributer,
 };
