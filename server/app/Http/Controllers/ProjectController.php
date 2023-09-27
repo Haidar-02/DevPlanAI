@@ -547,7 +547,7 @@ class ProjectController extends Controller
                         The project starts from the start date and ends at the deadline prompted above. Distribute tasks' deadlines between start date and the project deadline, considering design patterns.
                         Each generated task must have a title as title, a description as description, and a deadline as deadline. 
                         The project returned must have a title, a description, a deadline which I gave you before, and its corresponding tasks.
-                        The task title should describe the task content. 
+                        The task title should describe the task content. Return at least 10 tasks for the project and be specific based on the project's description.
                         Divide frontend, backend, design, and testing into smaller tasks if any of them exist, and be specific in each task's title. 
                         None of the tasks' deadlines must exceed the project's deadline. Return the deadline in the form of yyyy-mm-dd.";
             
@@ -556,7 +556,7 @@ class ProjectController extends Controller
             
             $prompt .=  ", I want your answer to be a parsable JSON object. Do not include any text like 'here is your output,' and so on. 
                         Only return one response. If there is an error, return an error response. If not, return the generated project. 
-                        Do not include in your answer any other text rather than the JSON response.";
+                        Do not include in your answer any other text rather than the JSON response like certainly here is your response ore Specifically, the answer should be as follows ...";
             
             $prompt .= ', the response should be as : 
                         {

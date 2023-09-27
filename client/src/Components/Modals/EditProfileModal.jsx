@@ -78,7 +78,7 @@ const EditProfileModal = ({ isOpen, onRequestClose, user, fetchUserData }) => {
         "bg-[#2D3142] p-5 w-1/2 mt-20 right-1/2 translate-x-1/2 rounded-lg"
       }
     >
-      <h2 className="text-lg font-medium w-full bg-white p-2 flex items-center justify-center text-[#2D3142] rounded-full">
+      <h2 className="text-lg font-medium w-fullp-2 flex items-center justify-center text-white rounded-full">
         Edit Profile
       </h2>
       <div className="w-full mt-5 p-3 flex flex-col items-center justify-center bg-gray-300 rounded-lg">

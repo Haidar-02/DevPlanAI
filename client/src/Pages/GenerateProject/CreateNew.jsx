@@ -52,6 +52,11 @@ const CreateNew = () => {
         });
         setIsLoading(false);
         console.log(response);
+        if (!response.data) {
+          setErrorMessage(
+            "Could not generate project, check input or try again later"
+          );
+        }
         setProject(response.data);
         setIsOpen(true);
       } catch (error) {
