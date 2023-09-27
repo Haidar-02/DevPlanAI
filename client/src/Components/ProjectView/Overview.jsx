@@ -112,7 +112,7 @@ const Overview = ({ project_id }) => {
         </div>
       )}
       {project && (
-        <div className="w-full p-2 flex-col justify-start items-center cursor-default h-[480px] p-5 bg-white rounded-xl overflow-auto">
+        <div className="w-full flex-col justify-start items-center cursor-default h-[480px] p-5 bg-white rounded-xl overflow-auto">
           <div className="w-full flex justify-between items-center pb-3 border-b-2 border-b-gray-600 cursor-default">
             <h2 className="text-lg font-medium text-[#2D3142]">
               {project.title}
