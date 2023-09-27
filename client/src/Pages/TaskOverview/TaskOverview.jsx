@@ -12,18 +12,30 @@ import {
   getTaskInfo,
   removeAssignee,
 } from "../../Helpers/task.helper";
-import { getStatusColor, stringAvatar } from "../../Helpers/helpers";
+import {
+  formatDateToView,
+  getStatusColor,
+  stringAvatar,
+} from "../../Helpers/helpers";
 import ErrorMessageComponent from "../../Components/EventComponents/ErrorComponent";
 import SuccessMessageComponent from "../../Components/EventComponents/SuccessComponent";
+import AddAssigneeModal from "../../Components/Modals/AddAssigneeModal";
 
 const TaskOverview = () => {
   const { taskId } = useParams();
   const pm_id = localStorage.getItem("pm_id");
   const user_id = localStorage.getItem("user_id");
   const [task, setTask] = useState();
+  const [projectId, setProjectId] = useState();
   const [comments, setComments] = useState("");
   const [status, setStatus] = useState("");
   const [commentSend, setCommentSend] = useState("");
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const onRequestClose = () => {
+    setIsOpen(false);
+  };
 
   const [errorMessage, setErrorMessage] = useState("");
   const [succesMessage, setSuccessMessage] = useState("");
@@ -38,6 +50,7 @@ const TaskOverview = () => {
       const response = await getTaskInfo(taskId);
       setTask(response.data.task);
       setStatus(response.data.task_status);
+      setProjectId(response.data.task.project_id);
     } catch (error) {
       console.log(error);
     }
@@ -108,7 +121,9 @@ const TaskOverview = () => {
                 {status}
               </p>
             </div>
-            <p className="text-sm text-red-500">Deadline: {task.deadline}</p>
+            <p className="text-sm text-red-500">
+              Deadline: {formatDateToView(task.deadline)}
+            </p>
           </div>
         )}
         <div className="w-full flex items-start justify-between">
@@ -125,7 +140,10 @@ const TaskOverview = () => {
               <div className="flex items-center justify-between w-full">
                 <h2 className="font-bold">Assignee</h2>
                 {canEditTask && !task?.assignee && (
-                  <button className="text-green-500 hover:opacity-80 transition-all">
+                  <button
+                    onClick={() => setIsOpen(true)}
+                    className="text-green-500 hover:opacity-80 transition-all"
+                  >
                     <AddBox />
                   </button>
                 )}
@@ -234,6 +252,15 @@ const TaskOverview = () => {
           />
         )}
       </div>
+      {task && (
+        <AddAssigneeModal
+          onRequestClose={onRequestClose}
+          isOpen={isOpen}
+          project_id={projectId}
+          task_id={taskId}
+          fetchTask={getTask}
+        />
+      )}
     </div>
   );
 };

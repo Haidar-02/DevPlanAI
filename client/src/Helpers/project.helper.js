@@ -189,6 +189,21 @@ async function getAllProjectTasks(project_id) {
   }
 }
 
+async function getProjectTeam(project_id) {
+  try {
+    const res = await axios.get(
+      `${baseUrl}user/getProjectTeam/${project_id}`,
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   getRecentProjects,
   getMyProjects,
@@ -202,4 +217,5 @@ export {
   getAllProjectTasks,
   searchUsersForCont,
   addContributer,
+  getProjectTeam,
 };

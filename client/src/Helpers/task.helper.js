@@ -72,6 +72,22 @@ async function addComment(task_id, { comment }) {
   }
 }
 
+async function assignTask(task_id, { user_id }) {
+  try {
+    const res = await axios.post(
+      `${baseUrl}user/addTaskAssignee/${task_id}`,
+      { assignee_id: user_id },
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function removeAssignee(task_id) {
   try {
     const res = await axios.delete(
@@ -94,4 +110,5 @@ export {
   getComments,
   addComment,
   removeAssignee,
+  assignTask,
 };
