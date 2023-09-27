@@ -10,9 +10,11 @@ import {
   addComment,
   getComments,
   getTaskInfo,
+  removeAssignee,
 } from "../../Helpers/task.helper";
 import { getStatusColor, stringAvatar } from "../../Helpers/helpers";
 import ErrorMessageComponent from "../../Components/EventComponents/ErrorComponent";
+import SuccessMessageComponent from "../../Components/EventComponents/SuccessComponent";
 
 const TaskOverview = () => {
   const { taskId } = useParams();
@@ -36,6 +38,19 @@ const TaskOverview = () => {
       const response = await getTaskInfo(taskId);
       setTask(response.data.task);
       setStatus(response.data.task_status);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleRemoveAssignee = async () => {
+    try {
+      const response = await removeAssignee(taskId);
+      console.log(response);
+      if (response.data.status === "success") {
+        setSuccessMessage(response.data.message);
+        getTask();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -115,7 +130,10 @@ const TaskOverview = () => {
                   </button>
                 )}
                 {canEditTask && task?.assignee && (
-                  <button className="text-red-500 hover:opacity-80 transition-all">
+                  <button
+                    onClick={() => handleRemoveAssignee()}
+                    className="text-red-500 hover:opacity-80 transition-all"
+                  >
                     <Cancel />
                   </button>
                 )}
@@ -206,6 +224,12 @@ const TaskOverview = () => {
         {errorMessage && (
           <ErrorMessageComponent
             message={errorMessage}
+            clearMessage={clearMessage}
+          />
+        )}
+        {succesMessage && (
+          <SuccessMessageComponent
+            message={succesMessage}
             clearMessage={clearMessage}
           />
         )}

@@ -72,10 +72,26 @@ async function addComment(task_id, { comment }) {
   }
 }
 
+async function removeAssignee(task_id) {
+  try {
+    const res = await axios.delete(
+      `${baseUrl}user/removeTaskAssignee/${task_id}`,
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   getRecentTasks,
   getRecentComments,
   getTaskInfo,
   getComments,
   addComment,
+  removeAssignee,
 };

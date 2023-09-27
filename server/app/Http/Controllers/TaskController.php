@@ -189,7 +189,7 @@ class TaskController extends Controller
         }
     }
     
-    public function removeTaskAssignee(Request $request, $task_id)
+    public function removeTaskAssignee($task_id)
     {
         try {
             $task = Task::findOrFail($task_id);
