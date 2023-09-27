@@ -261,7 +261,7 @@ class TaskController extends Controller
         }
     }
     
-    public function getTaskInfo(Request $request, $task_id)
+    public function getTaskInfo($task_id)
     {
         try {
             $task = Task::with('assignee')->findOrFail($task_id);
@@ -280,7 +280,7 @@ class TaskController extends Controller
         }
     }
     
-    public function getTaskComments(Request $request, $task_id)
+    public function getTaskComments($task_id)
     {
         try {
             $task = Task::with('comments.user')->findOrFail($task_id);

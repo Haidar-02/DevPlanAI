@@ -38,7 +38,7 @@ const Tasks = ({ project_id }) => {
               <p className="text-xs text-red-200">Deadline: {task.deadline}</p>
             </div>
             <div className="flex items-center justify-start gap-3">
-              {task?.assignee.first_name ? (
+              {task?.assignee ? (
                 <div className="flex items-center justify-center gap-2">
                   <p className="text-sm">Assigned to</p>
                   <Avatar src={task.assignee.profile_picture} />

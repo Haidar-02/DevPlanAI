@@ -60,6 +60,7 @@ const Overview = ({ project_id }) => {
       setDone(response.data.done_tasks_count);
       setPending(response.data.pending_tasks_count);
       setStatus(response.data.status);
+      localStorage.setItem("pm_id", response.data.project.project_manager.id);
     } catch (error) {
       console.log(error.response.data.message);
     }
