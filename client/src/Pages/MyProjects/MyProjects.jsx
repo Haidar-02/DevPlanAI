@@ -72,7 +72,7 @@ const MyProjects = () => {
             className="w-72 mb-5 px-3 pl-10 py-2 outline-none focus:bg-[#2D3142] focus:text-white rounded-md transition-all"
           />
         </div>
-        <div className=" h-[400px] w-full p-5 bg-white rounded-lg overflow-auto flex items-start justify-center gap-3 flex-wrap">
+        <div className=" h-[400px] w-full p-5 bg-white rounded-lg overflow-auto flex items-start justify-start gap-4 flex-wrap">
           {!isLoading && projects.length === 0 ? (
             <div className="flex flex-col items-center justify-center">
               <Lottie animationData={noProjects} loop={true} className="w-64" />
@@ -81,7 +81,7 @@ const MyProjects = () => {
           ) : (
             projects?.map((project) => (
               <Link key={project.id} to={`/project-overview/${project.id}`}>
-                <div className="w-[300px] h-[200px] bg-[#4F5D75] hover:bg-[#677897] cursor-pointer transition-all rounded-md flex flex-col items start justify-between p-2 text-white overflow-auto">
+                <div className="w-[320px] h-[200px] bg-[#4F5D75] hover:bg-[#677897] flex-1 cursor-pointer transition-all rounded-md flex flex-col items start justify-between p-2 text-white overflow-auto">
                   <p className="flex items-center justify-between">
                     {project.title}{" "}
                     <span
