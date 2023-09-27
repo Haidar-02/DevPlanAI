@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SideBar from "../../Components/SideBar/SideBar";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Avatar } from "@mui/material";
 import AddBox from "@mui/icons-material/AddBox";
 import Cancel from "@mui/icons-material/Cancel";
@@ -8,6 +8,7 @@ import CommentIcon from "@mui/icons-material/Comment";
 import Send from "@mui/icons-material/Send";
 import {
   addComment,
+  deleteTask,
   getComments,
   getTaskInfo,
   removeAssignee,
@@ -83,6 +84,18 @@ const TaskOverview = () => {
       const response = await getComments(taskId);
       setComments(response.data.task.comments);
       setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const navigate = useNavigate();
+  const handleDeleteTask = async () => {
+    try {
+      const response = await deleteTask(taskId);
+      console.log(response);
+      if (response.data.status === "success") {
+        navigate(`/project-overview/${projectId}`);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -205,6 +218,20 @@ const TaskOverview = () => {
                   Not Assigned
                 </p>
               )}
+            </div>
+            <div className="flex items-center justify-end gap-5">
+              {canEditTask && (
+                <button
+                  onClick={() => handleDeleteTask()}
+                  className="px-2 py-1 text-sm bg-red-600 text-white hover:opacity-80 transition-all rounded-md"
+                >
+                  Delete Task
+                </button>
+              )}
+
+              <button className="px-2 py-1 text-sm bg-green-600 text-white hover:opacity-80 transition-all rounded-md">
+                Mark Task Done
+              </button>
             </div>
           </div>
           <div className="flex flex-col items-center justify-center gap-5 overflow-auto">

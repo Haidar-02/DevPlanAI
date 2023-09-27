@@ -103,8 +103,24 @@ async function removeAssignee(task_id) {
   }
 }
 
+async function deleteTask(task_id) {
+  try {
+    const res = await axios.delete(
+      `${baseUrl}user/deleteTask/${task_id}`,
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   getRecentTasks,
+  deleteTask,
   getRecentComments,
   getTaskInfo,
   getComments,

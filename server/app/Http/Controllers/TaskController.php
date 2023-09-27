@@ -51,7 +51,7 @@ class TaskController extends Controller
         }
     }
     
-    public function deleteTask(Request $request, $task_id)
+    public function deleteTask($task_id)
     {
         try {
             $task = Task::findOrFail($task_id);
@@ -65,7 +65,7 @@ class TaskController extends Controller
                     'message' => 'Only the project manager can delete a task.',
                 ], 403);
             }
-    
+            Comments::where('task_id', $task_id)->delete();
             $task->delete();
         
             return response()->json([
