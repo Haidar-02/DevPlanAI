@@ -20,7 +20,7 @@ const RecentTasks = () => {
   }, []);
   const navigate = useNavigate();
   return (
-    <div className="bg-white p-3 rounded-lg flex flex-col items-center justify-start w-1/3 h-56 overflow-auto">
+    <div className="bg-white p-3 rounded-lg flex flex-col items-center justify-start flex-1 h-56 overflow-auto">
       <h2 className="font-bold self-start">Upcoming Tasks</h2>
       {tasks?.length === 0 ? (
         <div className="mt-2 border-t-2">

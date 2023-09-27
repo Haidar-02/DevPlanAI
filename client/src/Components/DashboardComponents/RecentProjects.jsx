@@ -23,7 +23,7 @@ const RecentProjects = () => {
 
   const navigate = useNavigate();
   return (
-    <div className="bg-white p-3 rounded-lg flex flex-col items-center justify-start overflow-auto h-[200px] w-3/4">
+    <div className="bg-white p-3 rounded-lg flex flex-col items-center justify-start overflow-auto h-[200px] w-full flex-1">
       <h2 className="font-bold self-start">Recent Projects</h2>
       {projects?.length === 0 ? (
         <div>

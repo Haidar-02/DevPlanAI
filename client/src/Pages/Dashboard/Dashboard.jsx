@@ -41,16 +41,17 @@ const Dashboard = () => {
             <h2 className="text-xl">
               Welcome
               <span className="text-[#2D3142] font-medium">
-                {" "}
                 {userInfo?.user.first_name}
               </span>
             </h2>
           )}
           <h2>here is your DashBoard</h2>
         </div>
-        <div className="flex flex-wrap items-center justify-center gap-5 overflow-auto w-full">
-          <RecentTasks />
-          <RecentComments />
+        <div className="flex flex-col items-center justify-center gap-3 w-full">
+          <div className="flex flex-wrap items-center justify-center gap-5 overflow-auto w-full">
+            <RecentTasks />
+            <RecentComments />
+          </div>
           <RecentProjects />
         </div>
       </div>
