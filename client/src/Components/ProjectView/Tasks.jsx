@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import { getAllProjectTasks } from "../../Helpers/project.helper";
 import { Avatar } from "@mui/material";
 import { getStatusColor } from "../../Helpers/helpers";
+import { useNavigate } from "react-router-dom";
 
 const Tasks = ({ project_id }) => {
   const [tasks, setTasks] = useState();
+
+  const navigate = useNavigate();
 
   const getProjectTasks = async (project_id) => {
     try {
       const response = await getAllProjectTasks(project_id);
       setTasks(response.data.tasks);
-      console.log(tasks);
     } catch (error) {
       console.log(error);
     }
@@ -28,6 +30,7 @@ const Tasks = ({ project_id }) => {
         {tasks?.map((task) => (
           <div
             key={task.id}
+            onClick={() => navigate(`/task-overview/${task.id}`)}
             className="w-[400px] cursor-pointer hover:bg-opacity-80 transition-all text-white h-[170px] flex flex-col items-center justify-between bg-[#4F5D75] rounded-md p-3"
           >
             <div className="flex items-center justify-between w-full py-1 px-4 rounded-full mb-2 shadow-xl border-b-2 border-b-white pb-2 text-white">

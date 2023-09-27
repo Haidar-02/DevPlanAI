@@ -12,6 +12,7 @@ import MyProjects from "./Pages/MyProjects/MyProjects";
 import Notifications from "./Pages/Notifications/Notifications";
 import Profile from "./Pages/Profile/Profile";
 import ProjectOverview from "./Pages/ProjectOverview/ProjectOverview";
+import TaskOverview from "./Pages/TaskOverview/TaskOverview";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           path="/project-overview/:project_id"
           element={<ProjectOverview />}
         />
+        <Route path="/task-overview/:taskId" element={<TaskOverview />} />
       </Routes>
     </Router>
   );

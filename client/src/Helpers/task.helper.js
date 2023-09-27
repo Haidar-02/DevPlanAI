@@ -26,4 +26,19 @@ async function getRecentComments() {
   }
 }
 
-export { getRecentTasks, getRecentComments };
+async function getTaskInfo(task_id) {
+  try {
+    const res = await axios.get(
+      `${baseUrl}user/getTaskInfo/${task_id}`,
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export { getRecentTasks, getRecentComments, getTaskInfo };

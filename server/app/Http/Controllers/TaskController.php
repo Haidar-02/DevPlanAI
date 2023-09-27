@@ -130,42 +130,24 @@ class TaskController extends Controller
         }
     }
     
-    public function markTaskDone(Request $request, $task_id)
+    public function markTaskDone($task_id)
     {
         try {
             $task = Task::findOrFail($task_id);
     
-            $task->is_done = true;
+            $task->is_done = !$task->is_done;
             $task->save();
+    
+            $message = $task->is_done ? 'Task marked as done successfully.' : 'Task marked as undone successfully.';
     
             return response()->json([
                 'status' => 'success',
-                'message' => 'Task marked as done successfully.',
+                'message' => $message,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'An error occurred while marking the task as done.',
-            ]);
-        }
-    }
-
-    public function markTaskUndone(Request $request, $task_id)
-    {
-        try {
-            $task = Task::findOrFail($task_id);
-    
-            $task->is_done = false;
-            $task->save();
-    
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Task marked as unDone successfully.',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'An error occurred while marking the task as done.',
+                'message' => 'An error occurred while marking the task as done/undone.',
             ]);
         }
     }
