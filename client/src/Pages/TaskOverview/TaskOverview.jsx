@@ -31,6 +31,8 @@ const TaskOverview = () => {
   const [status, setStatus] = useState("");
   const [commentSend, setCommentSend] = useState("");
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const onRequestClose = () => {
@@ -47,10 +49,12 @@ const TaskOverview = () => {
 
   const getTask = async () => {
     try {
+      setIsLoading(true);
       const response = await getTaskInfo(taskId);
       setTask(response.data.task);
       setStatus(response.data.task_status);
       setProjectId(response.data.task.project_id);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -58,8 +62,11 @@ const TaskOverview = () => {
 
   const handleRemoveAssignee = async () => {
     try {
+      setIsLoading(true);
+
       const response = await removeAssignee(taskId);
-      console.log(response);
+      setIsLoading(false);
+
       if (response.data.status === "success") {
         setSuccessMessage(response.data.message);
         getTask();
@@ -71,8 +78,11 @@ const TaskOverview = () => {
 
   const getTaskComments = async () => {
     try {
+      setIsLoading(true);
+
       const response = await getComments(taskId);
       setComments(response.data.task.comments);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -84,11 +94,14 @@ const TaskOverview = () => {
       return;
     }
     try {
+      setIsLoading(true);
+
       const response = await addComment(taskId, { comment: commentSend });
       if (response.data.status === "success") {
         getTaskComments();
         setCommentSend("");
       }
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -106,9 +119,14 @@ const TaskOverview = () => {
 
   return (
     <div className="flex">
+      {isLoading && (
+        <div className="fixed top-0 left-0 w-full h-1">
+          <div className="h-full bg-white animate-loading-bar shadow-lg"></div>
+        </div>
+      )}
       <SideBar />
       <div className="h-full p-7 flex-grow cursor-default">
-        <h2 className="text-2xl">Task OverView</h2>
+        <h2 className="text-2xl">Task Overview</h2>
         {task && (
           <div className="w-full flex items border-b-2 border-b-gray-800 pb-2 justify-between mt-10">
             <div className="flex items-end justify-start gap-3">
