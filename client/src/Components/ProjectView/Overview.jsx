@@ -259,8 +259,7 @@ const Overview = ({ project_id }) => {
                   <CheckBoxIcon /> Mark Project Done
                 </button>
               )}
-
-              {project.is_done && (
+              {project?.is_done === 1 && (
                 <button
                   onClick={() => markProjectAsDone(projectId)}
                   className="text-white bg-gray-700 px-2 py-1 rounded-md text-sm hover:opacity-80 transition-all"

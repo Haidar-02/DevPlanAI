@@ -27,7 +27,6 @@ const MyProjects = () => {
     try {
       setIsLoading(true);
       const response = await searchMyProjects(searchQuery);
-      console.log(response);
       setProjects(response.data.projects);
       setIsLoading(false);
     } catch (error) {
@@ -122,6 +121,7 @@ const MyProjects = () => {
                         key={teamMember.id}
                         sx={{ width: 24, height: 24 }}
                         className="-mr-2"
+                        src={teamMember.profile_picture || ""}
                       />
                     ))}
                   </div>
