@@ -4,6 +4,7 @@ import { getRecentComments } from "../../Helpers/task.helper";
 import { stringAvatar } from "../../Helpers/helpers";
 import Lottie from "lottie-react";
 import notification from "../../Assets/LottieAssets/notification.json";
+import { useNavigate } from "react-router-dom";
 const RecentComments = () => {
   const [comments, setComments] = useState();
   useEffect(() => {
@@ -18,6 +19,7 @@ const RecentComments = () => {
 
     fetchRecentComments();
   }, []);
+  const navigate = useNavigate();
   return (
     <div className="bg-white p-3 rounded-lg flex flex-col items-center justify-start w-1/2 h-56 overflow-auto">
       <h2 className="font-bold self-start">Recent comments</h2>
@@ -34,6 +36,7 @@ const RecentComments = () => {
       ) : (
         comments?.map((comment) => (
           <div
+            onClick={() => navigate(`/task-overview/${comment.task.id}`)}
             key={comment.id}
             className="flex w-full justify-between p-2 cursor-pointer mt-3 bg-gray-200 hover:opacity-70 transition-all rounded-md"
           >
