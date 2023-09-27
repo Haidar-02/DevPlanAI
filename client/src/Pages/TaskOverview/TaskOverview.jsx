@@ -168,17 +168,17 @@ const TaskOverview = () => {
             </p>
           </div>
         )}
-        <div className="w-full flex items-start justify-between">
-          <div className="flex flex-col items-start justify-start gap-10">
+        <div className="w-full flex items-start justify-center gap-10">
+          <div className="flex flex-col items-start justify-start gap-10 flex-1">
             {task && (
-              <div className="h-[200px] w-[400px] bg-white rounded-md mt-5 p-3 shadow-lg">
+              <div className="h-[200px] w-full bg-white rounded-md mt-5 p-3 shadow-lg">
                 <h2 className="font-bold">Description</h2>
                 <div className="h-full overflow-auto text-sm mt-2">
                   <p>{task.description}</p>
                 </div>
               </div>
             )}
-            <div className="w-[400px] bg-white rounded-lg p-3 shadow-lg">
+            <div className="w-full bg-white rounded-lg p-4 shadow-lg">
               <div className="flex items-center justify-between w-full">
                 <h2 className="font-bold">Assignee</h2>
                 {canEditTask && !task?.assignee && (
@@ -199,7 +199,7 @@ const TaskOverview = () => {
                 )}
               </div>
               {task && task.assignee ? (
-                <div className="flex w-full items-center justify-between px-3 py-1 mt-2 bg-gray-200 rounded-md">
+                <div className="flex w-full items-center justify-between p-3 mt-2 bg-gray-200 rounded-md">
                   <div className="flex items-start gap-2 mt-2">
                     {task.assignee.profile_picture ? (
                       <Avatar
@@ -225,12 +225,12 @@ const TaskOverview = () => {
                   </div>
                 </div>
               ) : (
-                <p className="text-sm text-gray-500 bg-gray-200 rounded-md p-1">
+                <p className="text-sm text-gray-500 bg-gray-200 rounded-md p-3">
                   Not Assigned
                 </p>
               )}
             </div>
-            <div className="flex items-center justify-end gap-5">
+            <div className="flex flex-1 items-center justify-end gap-5">
               {canEditTask && (
                 <button
                   onClick={() => handleDeleteTask()}
@@ -250,7 +250,7 @@ const TaskOverview = () => {
               </button>
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center gap-5 overflow-auto">
+          <div className="flex flex-1 flex-col items-center justify-center gap-5 overflow-auto">
             <div className="w-[500px] h-[300px] mt-5 bg-white rounded-lg p-3 shadow-lg">
               <h2 className="font-bold">Comments</h2>
               {comments && comments.length > 0 ? (

@@ -31,7 +31,7 @@ const Tasks = ({ project_id }) => {
           <div
             key={task.id}
             onClick={() => navigate(`/task-overview/${task.id}`)}
-            className="w-[330px] cursor-pointer hover:bg-opacity-70 transition-all text-black h-[170px] flex flex-col items-start justify-between bg-white rounded-md p-3"
+            className="w-[320px] cursor-pointer hover:bg-opacity-70 transition-all text-black h-[170px] flex flex-col items-start justify-between bg-white rounded-md p-3"
           >
             <div>
               <p className="font-medium">{task.title}</p>

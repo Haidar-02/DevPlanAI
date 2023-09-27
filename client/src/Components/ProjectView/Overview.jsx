@@ -210,37 +210,44 @@ const Overview = ({ project_id }) => {
                   </button>
                 )}
               </div>
-              {project.team.map((teamMember) => (
-                <div
-                  key={teamMember.id}
-                  className="w-full flex p-2 bg-gray-200 hover:bg-gray-300 transition-all rounded-md items-center justify-between"
-                >
-                  <div className="flex items-center gap-2 justify-start">
-                    <Avatar
-                      src={teamMember.profile_picture}
-                      alt={`${teamMember.first_name} ${teamMember.last_name}`}
-                    />
-                    <div>
-                      <p className="text-sm">
-                        {teamMember.first_name} {teamMember.last_name}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {teamMember.email}
-                      </p>
+              {project?.team && project.team.length > 0 ? (
+                project.team.map((teamMember) => (
+                  <div
+                    key={teamMember.id}
+                    className="w-full flex p-2 bg-gray-200 hover:bg-gray-300 transition-all rounded-md items-center justify-between"
+                  >
+                    <div className="flex items-center gap-2 justify-start">
+                      <Avatar
+                        src={teamMember.profile_picture}
+                        alt={`${teamMember.first_name} ${teamMember.last_name}`}
+                      />
+                      <div>
+                        <p className="text-sm">
+                          {teamMember.first_name} {teamMember.last_name}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {teamMember.email}
+                        </p>
+                      </div>
                     </div>
+                    {user_id === project.project_manager.id && (
+                      <button
+                        onClick={() =>
+                          handleRemoveContributor(projectId, teamMember.id)
+                        }
+                        className="text-red-500 hover:opacity-80"
+                      >
+                        <CancelIcon />
+                      </button>
+                    )}
                   </div>
-                  {user_id == project.project_manager.id && (
-                    <button
-                      onClick={() =>
-                        handleRemoveContributor(projectId, teamMember.id)
-                      }
-                      className="text-red-500 hover:opacity-80"
-                    >
-                      <CancelIcon />
-                    </button>
-                  )}
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-sm text-gray-100 mt-2">
+                  No team members available. Send requests to add yo your
+                  project
+                </p>
+              )}
             </div>
           </div>
           {user_id == project.project_manager.id && (
