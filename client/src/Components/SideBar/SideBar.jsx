@@ -31,16 +31,16 @@ const SideBar = () => {
   async function fetchUserInfo() {
     try {
       const response = await getUserGeneralInfo();
-      setUserInfo(response.data);
-      setIsLoading(false);
       if (response.data.status === "error") {
         setErrorMessage(response.data.message);
         if (response.data.message === "Unauthorized") {
           navigate("/login");
         }
       }
+      setUserInfo(response.data);
+      setIsLoading(false);
     } catch (error) {
-      console.error(
+      console.log(
         "Error fetching user information: ",
         error.response.data.message
       );
