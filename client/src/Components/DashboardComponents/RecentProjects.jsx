@@ -4,6 +4,7 @@ import { getRecentProjects } from "../../Helpers/project.helper";
 import { getStatusColor, stringAvatar } from "../../Helpers/helpers";
 import Lottie from "lottie-react";
 import noProjects from "../../Assets/LottieAssets/noProjects.json";
+import { useNavigate } from "react-router-dom";
 
 const RecentProjects = () => {
   const [projects, setProjects] = useState();
@@ -19,6 +20,8 @@ const RecentProjects = () => {
 
     fetchRecentProjects();
   }, []);
+
+  const navigate = useNavigate();
   return (
     <div className="bg-white p-3 rounded-lg flex flex-col items-center justify-start overflow-auto h-[200px] w-3/4">
       <h2 className="font-bold self-start">Recent Projects</h2>
@@ -36,6 +39,7 @@ const RecentProjects = () => {
       ) : (
         projects?.map((project) => (
           <div
+            onClick={() => navigate(`/project-overview/${project.id}`)}
             className="flex w-full justify-between items-center p-2 cursor-pointer mt-3 hover:opacity-70 bg-gray-200 transition-all rounded-md"
             key={project.id}
           >
