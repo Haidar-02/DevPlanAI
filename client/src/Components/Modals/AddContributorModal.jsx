@@ -38,7 +38,6 @@ const AddContributorModal = ({
   const handleAddConributor = async (projectId, user_id) => {
     try {
       const response = await addContributer(projectId, { user_id: user_id });
-      console.log(response);
       if (response.data.status === "success") {
         setSuccessMessage(response.data.message);
       } else {

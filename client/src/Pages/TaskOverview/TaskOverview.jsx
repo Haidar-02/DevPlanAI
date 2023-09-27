@@ -6,8 +6,13 @@ import AddBox from "@mui/icons-material/AddBox";
 import Cancel from "@mui/icons-material/Cancel";
 import CommentIcon from "@mui/icons-material/Comment";
 import Send from "@mui/icons-material/Send";
-import { getComments, getTaskInfo } from "../../Helpers/task.helper";
-import { stringAvatar } from "../../Helpers/helpers";
+import {
+  addComment,
+  getComments,
+  getTaskInfo,
+} from "../../Helpers/task.helper";
+import { getStatusColor, stringAvatar } from "../../Helpers/helpers";
+import ErrorMessageComponent from "../../Components/EventComponents/ErrorComponent";
 
 const TaskOverview = () => {
   const { taskId } = useParams();
@@ -16,6 +21,15 @@ const TaskOverview = () => {
   const [task, setTask] = useState();
   const [comments, setComments] = useState("");
   const [status, setStatus] = useState("");
+  const [commentSend, setCommentSend] = useState("");
+
+  const [errorMessage, setErrorMessage] = useState("");
+  const [succesMessage, setSuccessMessage] = useState("");
+
+  const clearMessage = () => {
+    setErrorMessage("");
+    setSuccessMessage("");
+  };
 
   const getTask = async () => {
     try {
@@ -30,13 +44,31 @@ const TaskOverview = () => {
   const getTaskComments = async () => {
     try {
       const response = await getComments(taskId);
-      console.log(response);
       setComments(response.data.task.comments);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleAddComment = async () => {
+    if (commentSend.trim() === "") {
+      setErrorMessage("Can't send empty comment");
+      return;
+    }
+    try {
+      const response = await addComment(taskId, { comment: commentSend });
+      if (response.data.status === "success") {
+        getTaskComments();
+        setCommentSend("");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCommentChange = (event) => {
+    setCommentSend(event.target.value);
+  };
   useEffect(() => {
     getTask();
     getTaskComments();
@@ -53,7 +85,13 @@ const TaskOverview = () => {
           <div className="w-full flex items border-b-2 border-b-gray-800 pb-2 justify-between mt-10">
             <div className="flex items-end justify-start gap-3">
               <p className="text-xl">{task.title}</p>
-              <p className="text-sm">{status}</p>
+              <p
+                className={`text-sm ${getStatusColor(
+                  status
+                )} px-2 py-1 rounded-lg`}
+              >
+                {status}
+              </p>
             </div>
             <p className="text-sm text-red-500">Deadline: {task.deadline}</p>
           </div>
@@ -119,40 +157,58 @@ const TaskOverview = () => {
             <div className="w-[500px] h-[300px] mt-5 bg-white rounded-lg p-3 shadow-lg">
               <h2 className="font-bold">Comments</h2>
               <div className="flex flex-col h-[250px] items-center overflow-auto justify-start gap-3 p-2">
-                {comments.map((comment) => (
-                  <div
-                    key={comment.id}
-                    className="flex w-full items-center justify-between px-3 py-1 mt-2 bg-gray-200 rounded-md"
-                  >
-                    <div className="flex items-start gap-2 mt-2 cursor-default">
-                      <Avatar
-                        src={comment.user.profile_picture || ""}
-                        sx={{ width: 40, height: 40 }}
-                      />
-                      <div className="flex items-start flex-col justify-center">
-                        <p className="text-xs text-gray-500">
-                          {comment.user.first_name} {comment.user.last_name}
-                        </p>
-                        <p className="text-sm">{comment.content}</p>
+                {comments &&
+                  comments?.map((comment) => (
+                    <div
+                      key={comment.id}
+                      className="flex w-full items-center justify-between px-3 py-1 mt-2 bg-gray-200 rounded-md"
+                    >
+                      <div className="flex items-start gap-2 mt-2 cursor-default">
+                        {comment.user.profile_picture ? (
+                          <Avatar src={comment.user.profile_picture} />
+                        ) : (
+                          <Avatar
+                            {...stringAvatar(
+                              `${comment.user.first_name} ${comment.user.last_name}`
+                            )}
+                          />
+                        )}
+                        <div className="flex items-start flex-col justify-center">
+                          <p className="text-xs text-gray-500">
+                            {comment.user.first_name} {comment.user.last_name}
+                          </p>
+                          <p className="text-sm">{comment.content}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
             <div className="relative w-full flex items-center justify-between gap-3">
               <input
                 type="text"
                 name="comment"
+                onChange={handleCommentChange}
                 id="comment"
+                value={commentSend}
                 className="w-full p-3 pl-10 outline-none rounded-md text-sm"
                 placeholder="your comment here"
               />
               <CommentIcon className="absolute top-3 left-2 text-[#2D3142]" />
-              <Send className=" text-gray-600 hover:text-gray-800 transition-all cursor-pointer" />
+              <button onClick={() => handleAddComment()}>
+                <Send className=" text-gray-600 hover:text-gray-800 transition-all cursor-pointer" />
+              </button>
             </div>
           </div>
         </div>
+      </div>
+      <div className="absolute top-10 right-10">
+        {errorMessage && (
+          <ErrorMessageComponent
+            message={errorMessage}
+            clearMessage={clearMessage}
+          />
+        )}
       </div>
     </div>
   );

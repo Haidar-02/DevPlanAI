@@ -56,4 +56,26 @@ async function getComments(task_id) {
   }
 }
 
-export { getRecentTasks, getRecentComments, getTaskInfo, getComments };
+async function addComment(task_id, { comment }) {
+  try {
+    const res = await axios.post(
+      `${baseUrl}user/addTaskComment/${task_id}`,
+      { comment: comment },
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export {
+  getRecentTasks,
+  getRecentComments,
+  getTaskInfo,
+  getComments,
+  addComment,
+};
