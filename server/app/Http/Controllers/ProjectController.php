@@ -485,14 +485,30 @@ class ProjectController extends Controller
                 ->orWhere('last_name', 'like', '%' . $searchQuery . '%')
                 ->orWhere('email', 'like', '%' . $searchQuery . '%')
                 ->get();
-
-            if($users->isEmpty()){
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'No such users found',
-                ]);
-            }
     
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Users matching your search',
+                'users' => $users,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while searching for users. Try again later',
+            ]);
+        }
+    }
+    public function searchUsersForContribution(Request $request)
+    {
+        try {
+            $searchQuery = $request->content;
+
+            $users = User::where('first_name', 'like', '%' . $searchQuery . '%')
+                ->orWhere('last_name', 'like', '%' . $searchQuery . '%')
+                ->orWhere('email', 'like', '%' . $searchQuery . '%')
+                ->where('id', '!=', Auth::id())
+                ->get();
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Users matching your search',

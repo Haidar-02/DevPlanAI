@@ -46,6 +46,7 @@ Route::group(["middleware" => "auth:api", "prefix" => "user"], function () {
     Route::get('getMyContributionRequests', [ProjectController::class, 'getMyContributionRequests']);
     Route::post('searchMyProjects', [ProjectController::class, 'searchMyProjects']);
     Route::post('searchUsers', [ProjectController::class, 'searchUsers']);
+    Route::post('searchUsersForContribution', [ProjectController::class, 'searchUsersForContribution']);
     Route::post('acceptGeneratedProject', [ProjectController::class, 'acceptGeneratedProject']);
     Route::post('generateProject', [ProjectController::class, 'generateProject']);
 

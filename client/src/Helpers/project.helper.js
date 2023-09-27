@@ -143,6 +143,38 @@ async function acceptProject({ project }) {
   }
 }
 
+async function searchUsersForCont(query) {
+  try {
+    const res = await axios.post(
+      `${baseUrl}user/searchUsersForContribution`,
+      { content: query },
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function addContributer(project_id, { user_id }) {
+  try {
+    const res = await axios.post(
+      `${baseUrl}user/addProjectContributor/${project_id}`,
+      { user_id: user_id },
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   getRecentProjects,
   getMyProjects,
@@ -153,4 +185,6 @@ export {
   markProjectDone,
   generateProjectAI,
   acceptProject,
+  searchUsersForCont,
+  addContributer,
 };
