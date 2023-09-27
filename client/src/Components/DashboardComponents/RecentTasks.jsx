@@ -3,6 +3,7 @@ import { getRecentTasks } from "../../Helpers/task.helper";
 import { formatDateToView, getStatusColor } from "../../Helpers/helpers";
 import Lottie from "lottie-react";
 import noTasks from "../../Assets/LottieAssets/noTasks.json";
+import { useNavigate } from "react-router-dom";
 const RecentTasks = () => {
   const [tasks, setTasks] = useState([]);
   useEffect(() => {
@@ -17,7 +18,7 @@ const RecentTasks = () => {
 
     fetchRecentTasks();
   }, []);
-
+  const navigate = useNavigate();
   return (
     <div className="bg-white p-3 rounded-lg flex flex-col items-center justify-start w-1/3 h-56 overflow-auto">
       <h2 className="font-bold self-start">Upcoming Tasks</h2>
@@ -32,6 +33,7 @@ const RecentTasks = () => {
         tasks?.map((task) => (
           <div
             key={task.id}
+            onClick={() => navigate(`/task-overview/${task.id}`)}
             className="flex w-full justify-between items-center p-2 cursor-pointer mt-3 hover:opacity-70 bg-gray-200 transition-all rounded-md"
           >
             <div className="flex gap-2">
