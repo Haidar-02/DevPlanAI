@@ -23,7 +23,7 @@ const Tasks = ({ project_id }) => {
   }, []);
   return (
     <div className="flex flex-col items-center justify-start gap-10">
-      <div className="w-full text-center text-xl bg-[#2D3142] rounded-full p-2 text-white shadow-lg">
+      <div className="w-full text-center text-xl bg-white rounded-full p-2 text-[#4F5D75] shadow-lg">
         My Project Tasks
       </div>
       <div className="w-full h-[400px] flex items-start justify-center rounded-lg p-5 gap-5 flex-wrap overflow-auto">

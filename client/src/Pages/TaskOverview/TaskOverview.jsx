@@ -11,6 +11,7 @@ import {
   deleteTask,
   getComments,
   getTaskInfo,
+  martTaskDone,
   removeAssignee,
 } from "../../Helpers/task.helper";
 import {
@@ -64,14 +65,12 @@ const TaskOverview = () => {
   const handleRemoveAssignee = async () => {
     try {
       setIsLoading(true);
-
       const response = await removeAssignee(taskId);
-      setIsLoading(false);
-
       if (response.data.status === "success") {
         setSuccessMessage(response.data.message);
         getTask();
       }
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -80,7 +79,6 @@ const TaskOverview = () => {
   const getTaskComments = async () => {
     try {
       setIsLoading(true);
-
       const response = await getComments(taskId);
       setComments(response.data.task.comments);
       setIsLoading(false);
@@ -92,9 +90,20 @@ const TaskOverview = () => {
   const handleDeleteTask = async () => {
     try {
       const response = await deleteTask(taskId);
-      console.log(response);
       if (response.data.status === "success") {
         navigate(`/project-overview/${projectId}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleMarkAsDone = async () => {
+    try {
+      const response = await martTaskDone(taskId);
+      if (response.data.status === "success") {
+        setSuccessMessage(response.data.message);
+        getTask();
       }
     } catch (error) {
       console.log(error);
@@ -229,8 +238,13 @@ const TaskOverview = () => {
                 </button>
               )}
 
-              <button className="px-2 py-1 text-sm bg-green-600 text-white hover:opacity-80 transition-all rounded-md">
-                Mark Task Done
+              <button
+                onClick={() => handleMarkAsDone()}
+                className={`px-2 py-1 text-sm text-white hover:opacity-80 rounded-md ${
+                  task?.is_done ? "bg-gray-800" : "bg-green-600"
+                }`}
+              >
+                {task?.is_done ? "Undone Task" : "Mark Task Done"}
               </button>
             </div>
           </div>

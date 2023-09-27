@@ -118,8 +118,25 @@ async function deleteTask(task_id) {
   }
 }
 
+async function martTaskDone(task_id) {
+  try {
+    const res = await axios.post(
+      `${baseUrl}user/markTaskDone/${task_id}`,
+      undefined,
+      auth()
+    );
+    if (res.status === 200) {
+      const data = res.data;
+      return { data };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   getRecentTasks,
+  martTaskDone,
   deleteTask,
   getRecentComments,
   getTaskInfo,
