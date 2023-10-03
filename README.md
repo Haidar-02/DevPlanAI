@@ -150,7 +150,7 @@
 
 ### Sample Request and Response from OpenAI (Postman)
 
-| Request                                     | Response screen                            |
+| Request                                     | Response                                   |
 | ------------------------------------------- | ------------------------------------------ |
 | ![fsdaf](./readme/OpenAi/openAIRequest.png) | ![fsdaf](./readme/OpenAi/openAIResult.png) |
 
