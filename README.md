@@ -2,8 +2,25 @@
 
 <br><br>
 
+<!-- Contents -->
+<img src="./readme/title8.svg"/>
+
+- [Project Philosophy](#project-desciption)
+- [User Stories](#user-stories)
+- [Prototyping](#prototyping)
+- [Tech Stack](#tech-stack)
+- [Demo](#demo)
+- [Performance](#performance)
+- [How to run](#prerequisites)
+
+<br><br>
+
 <!-- project philosophy -->
+
+<a name="project-philosophy"></a>
 <img src="./readme/title2.svg"/>
+
+### Project Desciption
 
 > A Website for developers and project managers that helps them generate their task schedule based on AI where it generates project tasks schedule.
 >
@@ -53,7 +70,12 @@ Certainly, here are the user stories with dashes:
 <br><br>
 
 <!-- Prototyping -->
+
+<a name="prototyping"></a>
+
 <img src="./readme/title3.svg"/>
+
+### Prototyping
 
 > We designed DevPlanAI using wireframes and mockups, iterating on the design until we reached the ideal layout for easy navigation and a seamless user experience.
 
@@ -71,12 +93,15 @@ Certainly, here are the user stories with dashes:
 
 <br><br>
 
-<br><br>
-
 <!-- Tech stack -->
+
+<a name="stacks"></a>
+
 <img src="./readme/title5.svg"/>
 
-### DevPlanAI is built using the following technologies:
+### Tech Stack
+
+#### DevPlanAI is built using the following technologies:
 
 - This project uses the [Laravel](https://laravel.com/) for the backend and [React](https://react.dev/) for the FrontEnd. Laravel is a popular open-source PHP web application framework designed for building modern, robust, and scalable web applications.
 
@@ -84,7 +109,12 @@ Certainly, here are the user stories with dashes:
 - The app uses the font ["Poppins"](https://fonts.google.com/specimen/Poppins) as its main font, and the design of the app adheres to the material design guidelines.
 
 <!-- Implementation -->
+
+<a name="demo"></a>
+
 <img src="./readme/title4.svg"/>
+
+### Demo
 
 > Using the wireframes and mockups as a guide, we implemented the DevPlanAI app with the following features:
 
@@ -107,11 +137,16 @@ Certainly, here are the user stories with dashes:
 <br><br>
 
 <!-- Performance -->
+
+<a name="performance"></a>
+
 <img src="./readme/title7.svg"/>
+
+### Performance
 
 > Using Laravel's eloquent models and efficiency in the controller functions here are few performance results directed from postman
 
-### Performance testing with Postman
+#### Performance testing with Postman
 
 | Login function                                                | Register function                                           |
 | ------------------------------------------------------------- | ----------------------------------------------------------- |
@@ -122,6 +157,9 @@ Certainly, here are the user stories with dashes:
 <br><br>
 
 <!-- How to run -->
+
+<a name="running"></a>
+
 <img src="./readme/title6.svg"/>
 
 > To set up DevPlanAI locally, follow these steps:
