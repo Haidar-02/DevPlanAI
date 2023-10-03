@@ -13,6 +13,7 @@
 - #### [Tech Stack](#tech-stack)
 - #### [Demo](#demo)
 - #### [APIs' Performance](#performance)
+- #### [OpenAI](#openai-1)
 - #### [How to Run](#prerequisites)
 
 <br><br>
