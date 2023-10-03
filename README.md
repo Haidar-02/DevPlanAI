@@ -28,7 +28,31 @@
 
 > We designed DevPlanAI using wireframes and mockups, iterating on the design until we reached the ideal layout for easy navigation and a seamless user experience.
 
+### Sample WireFrames
+
+| My Contribution Requests                            | Admin Users screen                               |
+| --------------------------------------------------- | ------------------------------------------------ |
+| ![Landing](./readme/figma//myRequestsWireFrame.png) | ![fsdaf](./readme/figma/adminUsersWireFrame.png) |
+
+### Sample Mockups
+
+| Dashboard Mockup                               | My Projects Mockup screen                     |
+| ---------------------------------------------- | --------------------------------------------- |
+| ![Landing](./readme/figma/dashboardMockup.png) | ![fsdaf](./readme/figma/myProjectsMockup.png) |
+
 <br><br>
+
+<br><br>
+
+<!-- Tech stack -->
+<img src="./readme/title5.svg"/>
+
+### DevPlanAI is built using the following technologies:
+
+- This project uses the [Laravel](https://laravel.com/) for the backend and [React](https://react.dev/) for the FrontEnd. Laravel is a popular open-source PHP web application framework designed for building modern, robust, and scalable web applications.
+
+- For persistent storage (database), the website uses [MySQL](https://www.mysql.com/). MySQL is an open-source relational database management system (RDBMS) that is widely used for managing and storing data. It is known for its speed, reliability, and ease of use, and it has become one of the most popular database systems in the world. MySQL is often used in web applications, content management systems (CMS), e-commerce platforms, and many other types of software applications.
+- The app uses the font ["Poppins"](https://fonts.google.com/specimen/Poppins) as its main font, and the design of the app adheres to the material design guidelines.
 
 <!-- Implementation -->
 <img src="./readme/title4.svg"/>
@@ -50,18 +74,6 @@
 | ![Landing](./readme/demo/admin-projects.gif) | ![fsdaf](./readme/demo/admin-users.gif)     |
 | Profile Screen                               |
 | ![fsdaf](./readme/demo/editProfile.gif)      |
-
-<br><br>
-
-<!-- Tech stack -->
-<img src="./readme/title5.svg"/>
-
-### DevPlanAI is built using the following technologies:
-
-- This project uses the [Laravel](https://laravel.com/) for the backend and [React](https://react.dev/) for the FrontEnd. Laravel is a popular open-source PHP web application framework designed for building modern, robust, and scalable web applications.
-
-- For persistent storage (database), the website uses [MySQL](https://www.mysql.com/). MySQL is an open-source relational database management system (RDBMS) that is widely used for managing and storing data. It is known for its speed, reliability, and ease of use, and it has become one of the most popular database systems in the world. MySQL is often used in web applications, content management systems (CMS), e-commerce platforms, and many other types of software applications.
-- The app uses the font ["Poppins"](https://fonts.google.com/specimen/Poppins) as its main font, and the design of the app adheres to the material design guidelines.
 
 <br><br>
 
