@@ -5,13 +5,15 @@
 <!-- Contents -->
 <img src="./readme/title8.svg"/>
 
-- [Project Philosophy](#project-desciption)
-- [User Stories](#user-stories)
-- [Prototyping](#prototyping)
-- [Tech Stack](#tech-stack)
-- [Demo](#demo)
-- [Performance](#performance)
-- [How to run](#prerequisites)
+### Contents
+
+- #### [Project Philosophy and Description](#project-desciption)
+- #### [User Stories and Types](#user-stories)
+- #### [Design and Prototyping](#prototyping)
+- #### [Tech Stack](#tech-stack)
+- #### [Demo](#demo)
+- #### [APIs' Performance](#performance)
+- #### [How to Run](#prerequisites)
 
 <br><br>
 
