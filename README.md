@@ -137,6 +137,24 @@
 
 <br><br>
 
+<!-- OpenAI -->
+
+<a name="openai"></a>
+
+<img src="./readme/title9.svg"/>
+
+### OpenAI
+
+> DevPlanAI sends a request to openai api in order to generate the task scheduling of the projects the users want to start
+
+### Sample Request and Response from OpenAI (Postman)
+
+| Request                                     | Response screen                            |
+| ------------------------------------------- | ------------------------------------------ |
+| ![fsdaf](./readme/OpenAi/openAIRequest.png) | ![fsdaf](./readme/OpenAi/openAIResult.png) |
+
+<br><br>
+
 <!-- How to run -->
 
 <a name="running"></a>
