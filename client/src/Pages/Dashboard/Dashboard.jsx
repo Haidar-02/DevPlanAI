@@ -39,13 +39,13 @@ const Dashboard = () => {
         <div className=" cursor-default">
           {userInfo && (
             <h2 className="text-xl">
-              Welcome
+              Welcome{" "}
               <span className="text-[#2D3142] font-medium">
-                {userInfo?.user.first_name}
+                {userInfo?.user.first_name}{" "}
               </span>
+              <span className="text-sm"> here is your DashBoard</span>
             </h2>
           )}
-          <h2>here is your DashBoard</h2>
         </div>
         <div className="flex flex-col items-center justify-center gap-3 w-full">
           <div className="flex flex-wrap items-center justify-center gap-5 overflow-auto w-full">
