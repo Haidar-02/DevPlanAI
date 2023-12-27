@@ -4,7 +4,6 @@ import { getProjectTeam } from "../../Helpers/project.helper";
 import { Avatar } from "@mui/material";
 import { stringAvatar } from "../../Helpers/helpers";
 import { assignTask } from "../../Helpers/task.helper";
-import SuccessMessageComponent from "../EventComponents/SuccessComponent";
 
 const AddAssigneeModal = ({
   isOpen,

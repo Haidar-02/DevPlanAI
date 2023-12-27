@@ -36,7 +36,7 @@ const Profile = () => {
       </div>
       <div className="p-7  w-full">
         <h2 className="text-2xl cursor-default">Profile</h2>
-        <div className="px-20 pt-10 flex flex-col gap-5 items-center justify-start">
+        <div className="px-20 pt-8 flex flex-col gap-5 items-center justify-start">
           {profile ? (
             <div className="w-full bg-white p-5 rounded-lg flex justify-between items-center">
               <div className="flex items-center gap-3 cursor-default">
