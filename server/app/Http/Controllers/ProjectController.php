@@ -9,6 +9,7 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\Team;
 use App\Models\User;
+use Carbon\Carbon;
 use DateTime;
 use Egulias\EmailValidator\Parser\Comment;
 use Error;
@@ -534,6 +535,13 @@ class ProjectController extends Controller
                     'message' => 'Please fill in all fields',
                 ]);
             }
+            $dueDate = Carbon::parse($request->deadline)->toDateString();
+            if ($dueDate < now()->toDateString()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Due date must be on or after the current date',
+                ]);
+            }
 
                             
             $prompt = "Generate project's description and tasks for the project with :";
@@ -582,7 +590,7 @@ class ProjectController extends Controller
 
             $project = OpenAI::completions()->create([
                 'max_tokens'=>2048,
-                'model' => 'text-davinci-003',
+                'model' => 'gpt-3.5-turbo-1106',
                 'prompt' => $prompt,
             ]);
             

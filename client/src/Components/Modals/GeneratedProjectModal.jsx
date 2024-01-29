@@ -30,22 +30,22 @@ const GeneratedProjectModal = ({ isOpen, onRequestClose, project }) => {
         <h2 className="pb-2 border-b-2 border-b-gray-800">Generated Project</h2>
         <div className="pb-2 border-b-2 border-b-white">
           <div className="flex w-full items-center justify-between mt-2">
-            <h2 className="text-xl">{project.project.title}</h2>
+            <h2 className="text-xl">{project?.project?.title}</h2>
             <h2 className="text-sm text-red-500">
-              Deadline: {formatDateToView(project.project.deadline)}
+              Deadline: {formatDateToView(project?.project?.deadline)}
             </h2>
           </div>
 
           <div className="mt-2">
             <p className="text-sm text-gray-700">
-              {project.project.description}
+              {project?.project?.description}
             </p>
           </div>
         </div>
         <div className="p-3">
           <h2>Generated Tasks</h2>
           <div className="p-4 w-full overflow-auto flex-wrap flex items-center justify-start cursor-default gap-3">
-            {project.project.tasks.map((task, index) => (
+            {project?.project?.tasks.map((task, index) => (
               <div
                 key={index}
                 className="p-3 bg-[#2D3142] rounded-md text-white w-[400px] flex flex-col items-center justify-between hover:bg-opacity-80 transition-all"
