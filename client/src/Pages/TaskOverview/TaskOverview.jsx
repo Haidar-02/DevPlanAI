@@ -55,10 +55,12 @@ const TaskOverview = () => {
     try {
       setIsLoading(true);
       const response = await getTaskInfo(taskId);
-      setTask(response.data.task);
-      setStatus(response.data.task_status);
-      setProjectId(response.data.task.project_id);
-      setIsLoading(false);
+      if (response.data.status !== "error") {
+        setTask(response.data.task);
+        setStatus(response.data.task_status);
+        setProjectId(response.data.task.project_id);
+        setIsLoading(false);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -82,8 +84,10 @@ const TaskOverview = () => {
     try {
       setIsLoading(true);
       const response = await getComments(taskId);
-      setComments(response.data.task.comments);
-      setIsLoading(false);
+      if (response.data.status !== "error") {
+        setComments(response.data.task.comments);
+        setIsLoading(false);
+      }
     } catch (error) {
       console.log(error);
     }
