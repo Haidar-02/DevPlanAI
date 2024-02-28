@@ -165,7 +165,7 @@ const SignupForm = () => {
       <input
         type="email"
         name="email"
-        placeholder="Email"
+        placeholder="Email *"
         autoComplete="off"
         value={formData.email}
         onChange={handleInputChange}
